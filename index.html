@@ -126,10 +126,10 @@
 
         <div class="flex items-center space-x-3 md:space-x-4 text-sm">
             
-            <!-- 24/7 LIVE CONNECTION BADGE -->
+            <!-- LIVE REFRESH SYNC STATUS BADGE -->
             <div id="syncIndicator" class="flex items-center gap-1.5 bg-neutral-900/90 border border-neutral-800 px-2.5 py-1 rounded-full text-[10px] font-mono text-gray-400 cursor-pointer" onclick="toggleConsoleDrawer()" title="Kliknite pre otvorenie živej konzoly">
                 <span id="syncDot" class="w-2 h-2 rounded-full bg-gray-500"></span>
-                <span id="syncText">KONTROLA API...</span>
+                <span id="syncText">SYNC PRI ŠTARTE...</span>
             </div>
 
             <!-- LIVE CONSOLE BUTTON -->
@@ -331,7 +331,6 @@
 
     <!-- ==================== ON-SCREEN LIVE DEVELOPER CONSOLE ==================== -->
     <div id="devConsoleDrawer" class="fixed bottom-0 right-0 left-0 md:left-auto md:right-6 md:w-[620px] h-72 bg-neutral-950/95 border-t md:border border-neutral-800 md:rounded-t-2xl shadow-2xl z-50 flex flex-col transition-all duration-300 transform translate-y-full backdrop-blur-xl">
-        <!-- Terminal Header -->
         <div class="bg-neutral-900 px-4 py-2.5 border-b border-neutral-800 flex items-center justify-between">
             <div class="flex items-center space-x-2">
                 <span class="w-3 h-3 rounded-full bg-red-500 cursor-pointer" onclick="toggleConsoleDrawer()"></span>
@@ -346,10 +345,7 @@
                 <button onclick="toggleConsoleDrawer()" class="text-gray-400 hover:text-white text-xs"><i class="fa-solid fa-xmark"></i></button>
             </div>
         </div>
-        <!-- Terminal Output -->
-        <div id="terminalBody" class="flex-1 p-3 overflow-y-auto terminal-font text-[11px] leading-relaxed space-y-1.5 text-gray-300">
-            <!-- Logs injected dynamically -->
-        </div>
+        <div id="terminalBody" class="flex-1 p-3 overflow-y-auto terminal-font text-[11px] leading-relaxed space-y-1.5 text-gray-300"></div>
     </div>
 
     <!-- ==================== MODALS ==================== -->
@@ -365,17 +361,13 @@
             </div>
 
             <div class="space-y-4 text-xs">
-                <!-- Sync Rate -->
+                <!-- Sync on Refresh Status -->
                 <div class="flex items-center justify-between bg-neutral-950 p-3 rounded-xl border border-neutral-800">
                     <div>
-                        <p class="font-bold text-white">24/7 Sync Frekvencia</p>
-                        <p class="text-gray-400 text-[11px]">Interval sťahovania nových filmov v pozadí</p>
+                        <p class="font-bold text-white">Synchronizácia pri obnovení stránky</p>
+                        <p class="text-gray-400 text-[11px]">Nové filmy sa načítajú vždy automaticky pri štarte/obnovení (F5)</p>
                     </div>
-                    <select id="settingSyncRate" class="bg-neutral-800 border border-neutral-700 text-white rounded px-2.5 py-1 text-xs focus:outline-none focus:border-red-600">
-                        <option value="30000">Každých 30 sekúnd</option>
-                        <option value="60000" selected>Každú 1 minútu</option>
-                        <option value="300000">Každých 5 minút</option>
-                    </select>
+                    <span class="text-green-400 font-mono text-xs font-bold"><i class="fa-solid fa-check mr-1"></i>AKTÍVNE</span>
                 </div>
 
                 <!-- Prefer CZ Dubbing -->
@@ -454,12 +446,12 @@
         <div class="bg-neutral-900 border border-neutral-800 rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl">
             <div class="flex justify-between items-center border-b border-neutral-800 pb-3">
                 <h3 class="text-lg font-bold flex items-center gap-2">
-                    <i class="fa-brands fa-youtube text-red-600"></i> YouTube Data API v3 (24/7 Sync)
+                    <i class="fa-brands fa-youtube text-red-600"></i> YouTube Data API v3 (Sync pri obnovení)
                 </h3>
                 <button onclick="closeModal('apiModal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <p class="text-xs text-gray-300 leading-relaxed">
-                Po vložení API kľúča bude aplikácia <b>24/7 nepretržite synchronizovať všetky novo pridané filmy z YouTube</b> priamo do Vašej databázy IndexedDB. Všetky detaily uvidíte v <b>Zabudovanej Konzóle</b>.
+                Po vložení API kľúča bude aplikácia <b>pri každom obnovení obrazovky (F5) okamžite synchronizovať a načítať všetky novo pridané filmy z YouTube</b> priamo do IndexedDB. Všetky detaily uvidíte v <b>Zabudovanej Konzóle</b>.
             </p>
             <div class="space-y-1.5">
                 <label class="text-xs text-gray-400 font-medium">Váš Google API Kľúč:</label>
@@ -471,7 +463,7 @@
             <div class="flex justify-end space-x-2 pt-2">
                 <button onclick="closeModal('apiModal')" class="bg-neutral-800 hover:bg-neutral-700 text-gray-300 font-semibold px-4 py-2 rounded-lg text-xs transition">Zrušiť</button>
                 <button onclick="saveApiKey()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-5 py-2 rounded-lg text-xs transition flex items-center gap-1.5">
-                    <i class="fa-solid fa-rotate"></i> Uložiť & Spustiť 24/7 Sync
+                    <i class="fa-solid fa-rotate"></i> Uložiť & Synchronizovať
                 </button>
             </div>
         </div>
@@ -538,7 +530,7 @@
                             <li><i class="fa-solid fa-check text-red-500 mr-2"></i>4K Ultra HD + 60FPS herné filmy</li>
                             <li><i class="fa-solid fa-check text-red-500 mr-2"></i>Neobmedzená Offline IndexedDB</li>
                             <li><i class="fa-solid fa-check text-red-500 mr-2"></i>VIP Odporúčací Algoritmus</li>
-                            <li><i class="fa-solid fa-check text-red-500 mr-2"></i>24/7 Automatická Synchronizácia</li>
+                            <li><i class="fa-solid fa-check text-red-500 mr-2"></i>Okamžitá synchronizácia noviniek</li>
                         </ul>
                     </div>
                     <button onclick="openPaymentGateway('PRO Ultra 4K', 12.99, 30)" class="mt-6 w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-black text-xs transition shadow-lg shadow-red-600/40 transform active:scale-95">Aktivovať PRO 4K</button>
@@ -680,8 +672,6 @@
             offline: [],
             audioMuted: false,
             liveTimerInterval: null,
-            syncInterval: null,
-            syncRateMs: 60000,
             czPref: true
         };
 
@@ -710,7 +700,7 @@
         };
 
         /**
-         * 3. ON-SCREEN LIVE DEVELOPER CONSOLE LOGGING
+         * 3. ON-SCREEN LIVE DEVELOPER CONSOLE
          */
         function logToTerminal(type, msg, meta = null) {
             const body = document.getElementById('terminalBody');
@@ -753,18 +743,20 @@
         }
 
         /**
-         * 4. INITIALIZATION & NETFLIX INTRO
+         * 4. INITIALIZATION & REFRESH SYNCHRONIZATION
          */
         window.addEventListener('DOMContentLoaded', async () => {
             playIntroSequence();
             await initDB();
-            logToTerminal('INFO', 'IndexedDB databáza inicializovaná.');
+            logToTerminal('INFO', 'IndexedDB inicializovaná.');
             await loadPersistentData();
             startSubscriptionLiveClock();
-            initAppContent();
+            
+            // Okamžitá synchronizácia najnovších filmov pri štarte/obnovení
+            await syncOnScreenRefresh();
+            
             setupSearchListener();
             setupNavbarScroll();
-            start24_7SyncEngine();
         });
 
         function playIntroSequence() {
@@ -781,17 +773,10 @@
             if (keyRec) {
                 appState.apiKey = keyRec.value;
                 document.getElementById('apiKeyInput').value = appState.apiKey;
-                updateSyncBadge('connecting', 'OVERUJEM API...');
-                logToTerminal('INFO', `Načítaný API Kľúč z DB: ${appState.apiKey.slice(0, 6)}...`);
+                logToTerminal('INFO', `Načítaný API Kľúč: ${appState.apiKey.slice(0, 6)}...`);
             } else {
                 updateSyncBadge('idle', 'BEZ API KĽÚČA');
-                logToTerminal('WARN', 'YouTube API kľúč nie je nastavený. Aplikácia beží v režime záložného katalógu.');
-            }
-
-            const syncRateRec = await idb.get('settings', 'sync_rate');
-            if (syncRateRec) {
-                appState.syncRateMs = Number(syncRateRec.value);
-                document.getElementById('settingSyncRate').value = String(appState.syncRateMs);
+                logToTerminal('WARN', 'API kľúč nie je nastavený. Bežím v režime lokálneho katalógu.');
             }
 
             const sub = await idb.get('subscription', 'active_plan');
@@ -815,13 +800,13 @@
             if (!dot || !txt) return;
 
             if (status === 'connected') {
-                dot.className = "w-2 h-2 rounded-full bg-green-500 animate-pulse";
+                dot.className = "w-2 h-2 rounded-full bg-green-500";
                 txt.className = "text-green-400 font-mono font-bold";
-                txt.innerText = text || "24/7 LIVE CONNECTED";
+                txt.innerText = text || "SYNCHRONIZOVANÉ ✔";
             } else if (status === 'connecting') {
                 dot.className = "w-2 h-2 rounded-full bg-yellow-500 animate-ping";
                 txt.className = "text-yellow-400 font-mono";
-                txt.innerText = text || "PRIPÁJAM...";
+                txt.innerText = text || "SYNCHRONIZUJEM...";
             } else if (status === 'error') {
                 dot.className = "w-2 h-2 rounded-full bg-red-500";
                 txt.className = "text-red-500 font-mono font-bold";
@@ -834,29 +819,45 @@
         }
 
         /**
-         * 5. 24/7 LIVE SYNCHRONIZATION ENGINE
+         * 5. SYNC ON REFRESH ENGINE (SPÚŠŤA SA LEN PRI OBNOVENÍ OBRAZOVKY)
          */
-        function start24_7SyncEngine() {
-            if (appState.syncInterval) clearInterval(appState.syncInterval);
+        async function syncOnScreenRefresh() {
+            logToTerminal('REQ', 'Obnovenie obrazovky: Začínam sťahovať čerstvé filmy z YouTube API...');
+            updateSyncBadge('connecting', 'SYNCHRONIZUJEM...');
 
-            appState.syncInterval = setInterval(async () => {
-                if (!appState.apiKey) return;
+            try {
+                // Načítanie vždy nových filmov (anti-cache parameter zabráni starým dátam)
+                const czDabingMovies = await queryYouTubeAPI("celý film cz dabing 4k", 8, 'date') || CURATED_CATALOG.czDabing;
+                const gaming = await queryYouTubeAPI("Game Full Movie 4K 60fps", 8, 'date') || CURATED_CATALOG.gaming;
+                const trending = await queryYouTubeAPI("Full Movies Cinema 2024", 8, 'relevance') || CURATED_CATALOG.trending;
+                const action = await queryYouTubeAPI("Sci-Fi Action Full Movie 4K", 8, 'date') || CURATED_CATALOG.action;
                 
-                logToTerminal('REQ', '24/7 Background Sync: Kontrolujem nové filmy...');
-                updateSyncBadge('connecting', 'SYNCHRONIZUJEM...');
-                
-                try {
-                    const latestMovies = await queryYouTubeAPI("celý film cz dabing 2024", 4, 'date');
-                    if (latestMovies && latestMovies.length > 0) {
-                        for (let m of latestMovies) {
-                            await idb.set('cachedSync', m);
-                        }
-                        updateSyncBadge('connected', '24/7 LIVE CONNECTED');
-                    }
-                } catch (e) {
-                    logToTerminal('ERROR', '24/7 Background Sync zlyhal', e.message);
+                const history = await idb.getAll('history');
+                let recoQuery = "Top Blockbuster Cinema Movies";
+                if (history.length > 0) {
+                    const last = history[history.length - 1];
+                    recoQuery = `${last.title.split(' ')[0]} Full Movie`;
+                    document.getElementById('recTitle').innerText = `Pretože ste pozerali: "${last.title.slice(0, 20)}..."`;
                 }
-            }, appState.syncRateMs);
+                const recommended = await queryYouTubeAPI(recoQuery, 8) || CURATED_CATALOG.recommended;
+
+                // Vykreslenie
+                renderRow('rowCzDabing', czDabingMovies);
+                renderRow('rowRecommended', recommended);
+                renderRow('rowGaming', gaming);
+                renderRow('rowTrending', trending);
+                renderRow('rowAction', action);
+
+                setHeroBillboard(czDabingMovies[0] || CURATED_CATALOG.czDabing[0]);
+
+                if (appState.apiKey) {
+                    updateSyncBadge('connected', 'SYNCHRONIZOVANÉ ✔');
+                    logToTerminal('SUCCESS', 'Všetky nové filmy boli úspešne načítané a synchronizované pri obnovení.');
+                }
+            } catch (e) {
+                logToTerminal('ERROR', `Chyba pri synchronizácii pri obnovení: ${e.message}`);
+                updateSyncBadge('error', 'CHYBA SYNC');
+            }
         }
 
         /**
@@ -910,7 +911,7 @@
         }
 
         /**
-         * 7. YOUTUBE API QUERIES WITH DUAL CONSOLE LOGGING
+         * 7. YOUTUBE API CALLS (WITH ANTI-CACHE QUERY)
          */
         async function queryYouTubeAPI(query, max = 8, order = 'relevance') {
             if (!appState.apiKey) {
@@ -943,8 +944,6 @@
                 logToTerminal('SUCCESS', `Získaných ${count} filmov pre "${query}"`);
                 console.log(`✅ [YouTube API Úspech]: Získaných ${count} filmov pre dotaz: "${query}"`);
 
-                updateSyncBadge('connected', '24/7 LIVE CONNECTED');
-
                 if (data.items && data.items.length > 0) {
                     return data.items.map(item => ({
                         id: item.id.videoId,
@@ -961,32 +960,6 @@
                 updateSyncBadge('error', 'SIEŤOVÁ CHYBA');
             }
             return null;
-        }
-
-        async function initAppContent() {
-            logToTerminal('INFO', 'Začínam načítavať kategórie a odporúčané filmy...');
-            
-            const czDabingMovies = await queryYouTubeAPI("celý film cz dabing 4k", 8, 'date') || CURATED_CATALOG.czDabing;
-            const gaming = await queryYouTubeAPI("Game Full Movie 4K 60fps", 8, 'date') || CURATED_CATALOG.gaming;
-            const trending = await queryYouTubeAPI("Full Movies Cinema 2024", 8, 'relevance') || CURATED_CATALOG.trending;
-            const action = await queryYouTubeAPI("Sci-Fi Action Full Movie 4K", 8, 'date') || CURATED_CATALOG.action;
-            
-            const history = await idb.getAll('history');
-            let recoQuery = "Top Blockbuster Cinema Movies";
-            if (history.length > 0) {
-                const last = history[history.length - 1];
-                recoQuery = `${last.title.split(' ')[0]} Full Movie`;
-                document.getElementById('recTitle').innerText = `Pretože ste pozerali: "${last.title.slice(0, 20)}..."`;
-            }
-            const recommended = await queryYouTubeAPI(recoQuery, 8) || CURATED_CATALOG.recommended;
-
-            renderRow('rowCzDabing', czDabingMovies);
-            renderRow('rowRecommended', recommended);
-            renderRow('rowGaming', gaming);
-            renderRow('rowTrending', trending);
-            renderRow('rowAction', action);
-
-            setHeroBillboard(czDabingMovies[0] || CURATED_CATALOG.czDabing[0]);
         }
 
         function setHeroBillboard(movie) {
@@ -1111,7 +1084,6 @@
             }
             renderSavedRows();
             updateModalButtons(movie);
-            initAppContent();
         }
 
         async function toggleLike(movie) {
@@ -1279,7 +1251,7 @@
             const input = document.getElementById('searchInput');
             input.value = '';
             document.getElementById('searchClearBtn').classList.add('hidden');
-            initAppContent();
+            syncOnScreenRefresh();
         }
 
         async function filterCategory(categoryQuery, btnEl) {
@@ -1289,7 +1261,7 @@
             }
 
             if (categoryQuery === 'all') {
-                initAppContent();
+                syncOnScreenRefresh();
                 return;
             }
 
@@ -1303,22 +1275,17 @@
         }
 
         /**
-         * 12. SETTINGS & APP CONFIGURATION HANDLERS
+         * 12. SETTINGS & APP CONFIGURATION
          */
         async function saveAppSettings() {
-            const syncRate = document.getElementById('settingSyncRate').value;
             const czPref = document.getElementById('settingCzPref').checked;
-
-            appState.syncRateMs = Number(syncRate);
             appState.czPref = czPref;
 
-            await idb.set('settings', { id: 'sync_rate', value: syncRate });
             await idb.set('settings', { id: 'cz_pref', value: czPref });
 
-            start24_7SyncEngine();
             closeModal('settingsModal');
             showToast("Nastavenia boli úspešne uložené do IndexedDB!", "success");
-            logToTerminal('SUCCESS', `Nastavenia uložené: Sync Rate=${syncRate}ms, CZ Pref=${czPref}`);
+            logToTerminal('SUCCESS', `Nastavenia uložené: CZ Pref=${czPref}`);
         }
 
         async function clearCacheOnly() {
@@ -1357,13 +1324,11 @@
             }
             await idb.set('settings', { id: 'yt_api_key', value: val });
             appState.apiKey = val;
-            updateSyncBadge('connecting', 'OVERUJEM SPOJENIE...');
             closeModal('apiModal');
-            showToast("24/7 Live Synchronizácia bola spustená! Sledujte Konzolu.", "success");
+            showToast("API Kľúč uložený! Spúšťam synchronizáciu pri načítaní...", "success");
             
             logToTerminal('INFO', `Nový API kľúč nastavený: ${val.slice(0, 8)}...`);
-            initAppContent();
-            start24_7SyncEngine();
+            syncOnScreenRefresh();
         }
 
         function toggleKeyVisibility() {
@@ -1379,7 +1344,7 @@
         }
 
         /**
-         * 14. UI HELPERS & SYNTHESIZED TA-DUM AUDIO
+         * 14. UI HELPERS & SYNTHESIZED AUDIO
          */
         function openModal(id) {
             document.getElementById(id).classList.remove('hidden');
@@ -1395,7 +1360,7 @@
 
         function navigateHome() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            initAppContent();
+            syncOnScreenRefresh();
         }
 
         async function wipeEntireDatabase() {
