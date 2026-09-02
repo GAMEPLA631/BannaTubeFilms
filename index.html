@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Netflix+Sans:wght@300;400;500;700;900&family=Montserrat:wght@400;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Netflix+Sans:wght@300;400;500;700;900&family=Montserrat:wght@400;600;700;800;900&family=Fira+Code:wght@400;600&display=swap');
 
         :root {
             --netflix-red: #E50914;
@@ -59,7 +59,7 @@
             opacity: 1;
         }
 
-        /* NETFLIX INTRO ANIMATION STYLES */
+        /* NETFLIX INTRO ANIMATION */
         #introOverlay {
             transition: opacity 0.8s ease-out, visibility 0.8s;
         }
@@ -88,11 +88,15 @@
                 filter: blur(8px) drop-shadow(0 0 100px rgba(229,9,20,0));
             }
         }
+
+        .terminal-font {
+            font-family: 'Fira Code', monospace;
+        }
     </style>
 </head>
 <body class="bg-[#141414] text-white selection:bg-red-600 selection:text-white relative">
 
-    <!-- ==================== NETFLIX LAUNCH INTRO SCREEN ==================== -->
+    <!-- NETFLIX LAUNCH INTRO SCREEN -->
     <div id="introOverlay" class="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center overflow-hidden">
         <div class="intro-logo-anim flex flex-col items-center">
             <span class="text-red-600 text-6xl md:text-8xl font-black tracking-tighter uppercase font-serif drop-shadow-2xl">BANNATUBE</span>
@@ -122,52 +126,37 @@
 
         <div class="flex items-center space-x-3 md:space-x-4 text-sm">
             
-            <!-- 24/7 LIVE SYNC STATUS BADGE -->
-            <div id="syncIndicator" class="hidden md:flex items-center gap-1.5 bg-neutral-900/90 border border-neutral-800 px-2.5 py-1 rounded-full text-[11px] font-mono text-green-400">
-                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
-                <span>24/7 SYNC</span>
+            <!-- 24/7 LIVE CONNECTION BADGE -->
+            <div id="syncIndicator" class="flex items-center gap-1.5 bg-neutral-900/90 border border-neutral-800 px-2.5 py-1 rounded-full text-[10px] font-mono text-gray-400 cursor-pointer" onclick="toggleConsoleDrawer()" title="Kliknite pre otvorenie živej konzoly">
+                <span id="syncDot" class="w-2 h-2 rounded-full bg-gray-500"></span>
+                <span id="syncText">KONTROLA API...</span>
             </div>
+
+            <!-- LIVE CONSOLE BUTTON -->
+            <button onclick="toggleConsoleDrawer()" title="Otvoriť zabudovanú vývojársku konzolu" class="bg-neutral-800/80 hover:bg-neutral-700 text-cyan-400 text-xs px-2.5 py-1.5 rounded-full border border-neutral-700 flex items-center gap-1.5 font-mono transition">
+                <i class="fa-solid fa-terminal text-xs"></i>
+                <span class="hidden md:inline">Konzola</span>
+            </button>
+
+            <!-- SETTINGS BUTTON -->
+            <button onclick="openModal('settingsModal')" title="Nastavenia aplikácie" class="bg-neutral-800/80 hover:bg-neutral-700 text-gray-300 hover:text-white text-xs px-2.5 py-1.5 rounded-full border border-neutral-700 flex items-center gap-1.5 transition">
+                <i class="fa-solid fa-gear text-xs"></i>
+                <span class="hidden md:inline">Nastavenia</span>
+            </button>
 
             <!-- Search Bar -->
             <div class="relative flex items-center">
                 <input id="searchInput" type="text" placeholder="Hľadať filmy, CZ dabing, hry..." 
-                    class="bg-black/60 border border-neutral-700 text-white text-xs md:text-sm rounded-full pl-9 pr-8 py-1.5 focus:outline-none focus:border-red-600 focus:bg-black/90 w-36 md:w-64 transition-all duration-300 backdrop-blur-md">
+                    class="bg-black/60 border border-neutral-700 text-white text-xs md:text-sm rounded-full pl-9 pr-8 py-1.5 focus:outline-none focus:border-red-600 focus:bg-black/90 w-36 md:w-60 transition-all duration-300 backdrop-blur-md">
                 <i class="fa-solid fa-magnifying-glass absolute left-3 text-gray-400 text-xs pointer-events-none"></i>
                 <button id="searchClearBtn" onclick="clearSearch()" class="absolute right-2.5 text-gray-400 hover:text-white hidden"><i class="fa-solid fa-xmark text-xs"></i></button>
             </div>
-
-            <!-- YouTube API Key Modal Trigger -->
-            <button onclick="openModal('apiModal')" title="Nastavenie YouTube API kľúča" class="bg-neutral-800/80 hover:bg-neutral-700 text-gray-300 hover:text-white text-xs px-3 py-1.5 rounded-full border border-neutral-700 flex items-center gap-1.5 transition">
-                <i class="fa-brands fa-youtube text-red-500 text-sm"></i>
-                <span class="hidden md:inline font-medium">YouTube API</span>
-            </button>
 
             <!-- Upgrade / Membership Status -->
             <button onclick="openModal('planModal')" id="navUpgradeBtn" class="bg-gradient-to-r from-red-600 to-red-800 hover:from-red-500 hover:to-red-700 text-white font-bold text-xs px-3.5 py-1.5 rounded-full shadow-lg shadow-red-600/30 flex items-center gap-1.5 transition transform hover:scale-105">
                 <i class="fa-solid fa-crown text-yellow-300"></i>
                 <span id="navUpgradeText">UPGRADE</span>
             </button>
-
-            <!-- Notifications Bell -->
-            <div class="relative">
-                <button onclick="toggleNotifications()" class="text-gray-300 hover:text-white text-base relative p-1.5">
-                    <i class="fa-solid fa-bell"></i>
-                    <span id="notifBadge" class="absolute top-0 right-0 w-2 h-2 bg-red-600 rounded-full animate-pulse"></span>
-                </button>
-                <!-- Notifications Dropdown -->
-                <div id="notifDropdown" class="absolute right-0 mt-3 w-72 bg-neutral-900/95 border border-neutral-800 backdrop-blur-xl rounded-xl shadow-2xl p-3 text-xs hidden z-50">
-                    <div class="flex justify-between items-center border-b border-neutral-800 pb-2 mb-2">
-                        <span class="font-bold text-white">Oznámenia (24/7 Sync)</span>
-                        <span class="text-[10px] text-gray-400 cursor-pointer hover:text-red-500" onclick="clearNotifs()">Vyčistiť</span>
-                    </div>
-                    <div id="notifList" class="space-y-2 max-h-56 overflow-y-auto">
-                        <div class="p-2 bg-neutral-800/50 rounded-lg">
-                            <p class="font-bold text-red-500">🎉 Vitajte v BannaTube PRO!</p>
-                            <p class="text-gray-400 text-[11px]">24/7 synchronizácia filmov a českého dabingu je aktívna.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- Profile Avatar & Dropdown -->
             <div class="relative group">
@@ -183,8 +172,8 @@
                             <i class="fa-solid fa-clock mr-1"></i>Expirácia: <span id="timerCountdown">--:--:--</span>
                         </div>
                     </div>
-                    <a href="javascript:void(0)" onclick="showWatchlistSection()" class="flex items-center px-4 py-2.5 hover:bg-neutral-800 text-gray-200"><i class="fa-solid fa-bookmark mr-2.5 text-yellow-500"></i>Môj Zoznam</a>
-                    <a href="javascript:void(0)" onclick="showOfflineSection()" class="flex items-center px-4 py-2.5 hover:bg-neutral-800 text-gray-200"><i class="fa-solid fa-download mr-2.5 text-cyan-400"></i>Stiahnuté Filmy</a>
+                    <a href="javascript:void(0)" onclick="openModal('settingsModal')" class="flex items-center px-4 py-2.5 hover:bg-neutral-800 text-gray-200"><i class="fa-solid fa-gear mr-2.5 text-gray-400"></i>Nastavenia Platformy</a>
+                    <a href="javascript:void(0)" onclick="toggleConsoleDrawer()" class="flex items-center px-4 py-2.5 hover:bg-neutral-800 text-cyan-400"><i class="fa-solid fa-terminal mr-2.5"></i>Otvoriť Live Konzolu</a>
                     <a href="javascript:void(0)" onclick="openModal('apiModal')" class="flex items-center px-4 py-2.5 hover:bg-neutral-800 text-gray-200"><i class="fa-solid fa-key mr-2.5 text-amber-400"></i>Spravovať API Kľúč</a>
                     <div class="border-t border-neutral-800 my-1"></div>
                     <a href="javascript:void(0)" onclick="wipeEntireDatabase()" class="flex items-center px-4 py-2.5 hover:bg-neutral-800 text-red-400 font-semibold"><i class="fa-solid fa-trash mr-2.5"></i>Resetovať Všetky Dáta</a>
@@ -193,7 +182,7 @@
         </div>
     </nav>
 
-    <!-- GENRE PILL BAR (NETFLIX TAGS) -->
+    <!-- GENRE PILL BAR -->
     <div class="pt-20 px-4 md:px-12 flex items-center space-x-2 overflow-x-auto hide-scrollbar z-30 relative pb-2">
         <button onclick="filterCategory('all', this)" class="genre-tag active bg-white text-black text-xs font-bold px-4 py-1.5 rounded-full transition whitespace-nowrap">Všetko</button>
         <button onclick="filterCategory('celý film cz dabing 4k', this)" class="genre-tag bg-neutral-800/80 hover:bg-neutral-700 text-white text-xs font-medium px-4 py-1.5 rounded-full border border-neutral-700 transition whitespace-nowrap"><span class="text-red-500 font-bold mr-1">🇨🇿</span> Český Dabing (Celé Filmy)</button>
@@ -235,7 +224,6 @@
             </div>
         </div>
 
-        <!-- Mute Audio / Age Tag -->
         <div class="absolute right-0 bottom-24 flex items-center space-x-3 pr-6 md:pr-12 z-20">
             <button onclick="toggleAudioEffect()" id="audioToggleBtn" class="w-9 h-9 rounded-full border border-neutral-500 bg-black/50 backdrop-blur-md flex items-center justify-center text-white hover:border-white transition">
                 <i class="fa-solid fa-volume-high text-xs"></i>
@@ -279,7 +267,7 @@
             </div>
         </section>
 
-        <!-- ROW 2: Gaming Movies 4K (Cinematics) -->
+        <!-- ROW 2: Gaming Movies 4K -->
         <section class="space-y-2 row-group relative">
             <h2 class="text-lg md:text-xl font-extrabold tracking-wide flex items-center gap-2">
                 <i class="fa-solid fa-gamepad text-red-600"></i> Herné Kinematické Filmy (4K 60FPS)
@@ -315,7 +303,7 @@
             </div>
         </section>
 
-        <!-- ROW 5: My Watchlist (Persisted in IndexedDB) -->
+        <!-- ROW 5: My Watchlist -->
         <section id="watchlistSection" class="space-y-2 row-group relative hidden">
             <h2 class="text-lg md:text-xl font-extrabold tracking-wide text-yellow-500 flex items-center gap-2">
                 <i class="fa-solid fa-bookmark"></i> Váš Uložený Zoznam (IndexedDB)
@@ -327,7 +315,7 @@
             </div>
         </section>
 
-        <!-- ROW 6: Offline Downloads (Persisted) -->
+        <!-- ROW 6: Offline Downloads -->
         <section id="offlineSection" class="space-y-2 row-group relative hidden">
             <h2 class="text-lg md:text-xl font-extrabold tracking-wide text-cyan-400 flex items-center gap-2">
                 <i class="fa-solid fa-cloud-arrow-down"></i> Stiahnuté Filmy na Cesty (Offline Knižnica)
@@ -341,9 +329,86 @@
 
     </main>
 
+    <!-- ==================== ON-SCREEN LIVE DEVELOPER CONSOLE ==================== -->
+    <div id="devConsoleDrawer" class="fixed bottom-0 right-0 left-0 md:left-auto md:right-6 md:w-[620px] h-72 bg-neutral-950/95 border-t md:border border-neutral-800 md:rounded-t-2xl shadow-2xl z-50 flex flex-col transition-all duration-300 transform translate-y-full backdrop-blur-xl">
+        <!-- Terminal Header -->
+        <div class="bg-neutral-900 px-4 py-2.5 border-b border-neutral-800 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 rounded-full bg-red-500 cursor-pointer" onclick="toggleConsoleDrawer()"></span>
+                <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                <span class="text-xs font-mono font-bold text-gray-300 ml-2 flex items-center gap-1.5">
+                    <i class="fa-solid fa-terminal text-cyan-400"></i> BannaTube Live API Console
+                </span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button onclick="clearOnScreenConsole()" class="text-[10px] text-gray-400 hover:text-white bg-neutral-800 px-2 py-0.5 rounded font-mono">Vyčistiť</button>
+                <button onclick="toggleConsoleDrawer()" class="text-gray-400 hover:text-white text-xs"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+        </div>
+        <!-- Terminal Output -->
+        <div id="terminalBody" class="flex-1 p-3 overflow-y-auto terminal-font text-[11px] leading-relaxed space-y-1.5 text-gray-300">
+            <!-- Logs injected dynamically -->
+        </div>
+    </div>
+
     <!-- ==================== MODALS ==================== -->
 
-    <!-- 1. FULL NETFLIX PLAYER MODAL -->
+    <!-- 1. SETTINGS MODAL -->
+    <div id="settingsModal" class="fixed inset-0 z-50 bg-black/85 hidden flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-neutral-900 border border-neutral-800 rounded-2xl max-w-lg w-full p-6 space-y-5 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-neutral-800 pb-3">
+                <h3 class="text-lg font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-gear text-red-600"></i> Nastavenia Platformy
+                </h3>
+                <button onclick="closeModal('settingsModal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <div class="space-y-4 text-xs">
+                <!-- Sync Rate -->
+                <div class="flex items-center justify-between bg-neutral-950 p-3 rounded-xl border border-neutral-800">
+                    <div>
+                        <p class="font-bold text-white">24/7 Sync Frekvencia</p>
+                        <p class="text-gray-400 text-[11px]">Interval sťahovania nových filmov v pozadí</p>
+                    </div>
+                    <select id="settingSyncRate" class="bg-neutral-800 border border-neutral-700 text-white rounded px-2.5 py-1 text-xs focus:outline-none focus:border-red-600">
+                        <option value="30000">Každých 30 sekúnd</option>
+                        <option value="60000" selected>Každú 1 minútu</option>
+                        <option value="300000">Každých 5 minút</option>
+                    </select>
+                </div>
+
+                <!-- Prefer CZ Dubbing -->
+                <div class="flex items-center justify-between bg-neutral-950 p-3 rounded-xl border border-neutral-800">
+                    <div>
+                        <p class="font-bold text-white">Preferovať Český Dabing (CZ/SK)</p>
+                        <p class="text-gray-400 text-[11px]">Prednostne vyhľadávať filmy s českým zvukom</p>
+                    </div>
+                    <input type="checkbox" id="settingCzPref" checked class="w-4 h-4 accent-red-600 cursor-pointer">
+                </div>
+
+                <!-- Database Tools -->
+                <div class="space-y-2 bg-neutral-950 p-3 rounded-xl border border-neutral-800">
+                    <p class="font-bold text-white mb-1">Správa Databázy (IndexedDB)</p>
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="clearCacheOnly()" class="bg-neutral-800 hover:bg-neutral-700 text-gray-300 px-3 py-1.5 rounded text-[11px] font-semibold border border-neutral-700 transition">
+                            <i class="fa-solid fa-broom mr-1"></i> Vyčistiť Cache filmov
+                        </button>
+                        <button onclick="exportDatabaseJSON()" class="bg-neutral-800 hover:bg-neutral-700 text-cyan-400 px-3 py-1.5 rounded text-[11px] font-semibold border border-neutral-700 transition">
+                            <i class="fa-solid fa-file-export mr-1"></i> Exportovať Zálohu
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end space-x-2 pt-2 border-t border-neutral-800">
+                <button onclick="closeModal('settingsModal')" class="bg-neutral-800 hover:bg-neutral-700 text-gray-300 font-semibold px-4 py-2 rounded-lg text-xs transition">Zavrieť</button>
+                <button onclick="saveAppSettings()" class="bg-red-600 hover:bg-red-700 text-white font-bold px-5 py-2 rounded-lg text-xs transition">Uložiť Nastavenia</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. FULL NETFLIX PLAYER MODAL -->
     <div id="playerModal" class="fixed inset-0 z-50 bg-black/95 hidden flex items-center justify-center p-2 md:p-6 backdrop-blur-2xl">
         <div class="relative w-full max-w-5xl bg-neutral-900 border border-neutral-800 rounded-2xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh]">
             <button onclick="closePlayer()" class="absolute top-4 right-4 z-50 text-white hover:text-red-500 bg-black/70 hover:bg-black rounded-full w-10 h-10 flex items-center justify-center transition border border-neutral-700">
@@ -353,7 +418,6 @@
                 <iframe id="videoIframe" class="absolute inset-0 w-full h-full" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
             
-            <!-- Player Info & Controls Drawer -->
             <div class="p-6 overflow-y-auto space-y-4 bg-gradient-to-b from-neutral-900 to-neutral-950">
                 <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
@@ -367,7 +431,6 @@
                         <h3 id="playerTitle" class="text-xl md:text-2xl font-black">Názov Filmu</h3>
                     </div>
 
-                    <!-- Action Buttons -->
                     <div class="flex items-center space-x-2">
                         <button id="modalWatchlistBtn" class="bg-neutral-800 hover:bg-neutral-700 text-white px-4 py-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 border border-neutral-700 transition">
                             <i class="fa-solid fa-plus"></i> <span>Zoznam</span>
@@ -386,7 +449,7 @@
         </div>
     </div>
 
-    <!-- 2. YOUTUBE API KEY MODAL -->
+    <!-- 3. YOUTUBE API KEY MODAL -->
     <div id="apiModal" class="fixed inset-0 z-50 bg-black/85 hidden flex items-center justify-center p-4 backdrop-blur-md">
         <div class="bg-neutral-900 border border-neutral-800 rounded-2xl max-w-md w-full p-6 space-y-5 shadow-2xl">
             <div class="flex justify-between items-center border-b border-neutral-800 pb-3">
@@ -396,7 +459,7 @@
                 <button onclick="closeModal('apiModal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <p class="text-xs text-gray-300 leading-relaxed">
-                Po vložení Vášho API kľúča bude aplikácia <b>24/7 v reálnom čase synchronizovať všetky novo pridané filmy z YouTube</b> priamo do Vašej databázy IndexedDB.
+                Po vložení API kľúča bude aplikácia <b>24/7 nepretržite synchronizovať všetky novo pridané filmy z YouTube</b> priamo do Vašej databázy IndexedDB. Všetky detaily uvidíte v <b>Zabudovanej Konzóle</b>.
             </p>
             <div class="space-y-1.5">
                 <label class="text-xs text-gray-400 font-medium">Váš Google API Kľúč:</label>
@@ -414,7 +477,7 @@
         </div>
     </div>
 
-    <!-- 3. UPGRADE PLANS MODAL -->
+    <!-- 4. UPGRADE PLANS MODAL -->
     <div id="planModal" class="fixed inset-0 z-50 bg-black/90 hidden flex items-center justify-center p-4 overflow-y-auto backdrop-blur-xl">
         <div class="bg-neutral-950 border border-neutral-800 rounded-3xl max-w-4xl w-full p-6 md:p-8 space-y-6 shadow-2xl my-6">
             <div class="flex justify-between items-center border-b border-neutral-800 pb-4">
@@ -427,7 +490,6 @@
                 <button onclick="closeModal('planModal')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
 
-            <!-- 3 Pricing Cards -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
                 <!-- Basic -->
                 <div class="border border-neutral-800 rounded-2xl p-5 bg-neutral-900/50 flex flex-col justify-between hover:border-neutral-600 transition">
@@ -485,7 +547,7 @@
         </div>
     </div>
 
-    <!-- 4. PAYMENT GATEWAY MODAL -->
+    <!-- 5. PAYMENT GATEWAY MODAL -->
     <div id="paymentModal" class="fixed inset-0 z-50 bg-black/90 hidden flex items-center justify-center p-4 backdrop-blur-xl">
         <div class="bg-neutral-900 border border-neutral-800 rounded-3xl max-w-md w-full p-6 md:p-8 space-y-5 shadow-2xl">
             <div class="flex justify-between items-center border-b border-neutral-800 pb-3">
@@ -537,7 +599,7 @@
     <!-- ==================== JAVASCRIPT ENGINE ==================== -->
     <script>
         /**
-         * 1. INDEXEDDB PERSISTENCE ENGINE (BannaTubeDB)
+         * 1. INDEXEDDB DATABASE ENGINE
          */
         const DB_NAME = 'BannaTubeDB_V2';
         const DB_VERSION = 1;
@@ -606,7 +668,7 @@
         };
 
         /**
-         * 2. STATE & CURATED 4K MOVIE CATALOG (INCLUDING CZ DABING)
+         * 2. GLOBAL APP STATE & FALLBACK CATALOG
          */
         let appState = {
             apiKey: '',
@@ -618,7 +680,9 @@
             offline: [],
             audioMuted: false,
             liveTimerInterval: null,
-            syncInterval: null
+            syncInterval: null,
+            syncRateMs: 60000,
+            czPref: true
         };
 
         const CURATED_CATALOG = {
@@ -646,45 +710,90 @@
         };
 
         /**
-         * 3. INITIALIZATION & NETFLIX INTRO LAUNCHER
+         * 3. ON-SCREEN LIVE DEVELOPER CONSOLE LOGGING
+         */
+        function logToTerminal(type, msg, meta = null) {
+            const body = document.getElementById('terminalBody');
+            if (!body) return;
+
+            const time = new Date().toLocaleTimeString();
+            const row = document.createElement('div');
+            row.className = "py-0.5 border-b border-neutral-900 flex items-start space-x-2";
+
+            let tag = `<span class="text-gray-500">[${time}]</span>`;
+            if (type === 'SUCCESS') {
+                tag += ` <span class="text-green-400 font-bold">✔ [API_OK]</span>`;
+            } else if (type === 'ERROR') {
+                tag += ` <span class="text-red-500 font-bold">✖ [API_ERR]</span>`;
+            } else if (type === 'REQ') {
+                tag += ` <span class="text-cyan-400 font-bold">➜ [HTTP_REQ]</span>`;
+            } else {
+                tag += ` <span class="text-yellow-400 font-bold">ℹ [SYSTEM]</span>`;
+            }
+
+            let content = `<span class="${type === 'ERROR' ? 'text-red-400' : 'text-gray-300'}">${msg}</span>`;
+            if (meta) {
+                content += `<pre class="text-[10px] text-gray-500 bg-neutral-900/90 p-1.5 rounded mt-1 overflow-x-auto">${typeof meta === 'object' ? JSON.stringify(meta, null, 2) : meta}</pre>`;
+            }
+
+            row.innerHTML = `${tag} <div class="flex-1">${content}</div>`;
+            body.appendChild(row);
+            body.scrollTop = body.scrollHeight;
+        }
+
+        function toggleConsoleDrawer() {
+            const drawer = document.getElementById('devConsoleDrawer');
+            drawer.classList.toggle('translate-y-full');
+        }
+
+        function clearOnScreenConsole() {
+            const body = document.getElementById('terminalBody');
+            body.innerHTML = '';
+            logToTerminal('INFO', 'Konzola bola vyčistená.');
+        }
+
+        /**
+         * 4. INITIALIZATION & NETFLIX INTRO
          */
         window.addEventListener('DOMContentLoaded', async () => {
-            // Spustenie Netflix Intro Animácie + Ta-Dum Zvuku
             playIntroSequence();
-
             await initDB();
+            logToTerminal('INFO', 'IndexedDB databáza inicializovaná.');
             await loadPersistentData();
             startSubscriptionLiveClock();
             initAppContent();
             setupSearchListener();
             setupNavbarScroll();
-            start24_7SyncEngine(); // Spustenie 24/7 background synchronizácie
+            start24_7SyncEngine();
         });
 
         function playIntroSequence() {
-            setTimeout(() => {
-                playNetflixTaDum();
-            }, 300);
-
+            setTimeout(() => { playNetflixTaDum(); }, 300);
             setTimeout(() => {
                 const overlay = document.getElementById('introOverlay');
                 overlay.style.opacity = '0';
-                setTimeout(() => {
-                    overlay.style.display = 'none';
-                }, 800);
+                setTimeout(() => { overlay.style.display = 'none'; }, 800);
             }, 2500);
         }
 
         async function loadPersistentData() {
-            // 1. API Key
             const keyRec = await idb.get('settings', 'yt_api_key');
             if (keyRec) {
                 appState.apiKey = keyRec.value;
                 document.getElementById('apiKeyInput').value = appState.apiKey;
-                document.getElementById('syncIndicator').classList.remove('hidden');
+                updateSyncBadge('connecting', 'OVERUJEM API...');
+                logToTerminal('INFO', `Načítaný API Kľúč z DB: ${appState.apiKey.slice(0, 6)}...`);
+            } else {
+                updateSyncBadge('idle', 'BEZ API KĽÚČA');
+                logToTerminal('WARN', 'YouTube API kľúč nie je nastavený. Aplikácia beží v režime záložného katalógu.');
             }
 
-            // 2. Subscriptions
+            const syncRateRec = await idb.get('settings', 'sync_rate');
+            if (syncRateRec) {
+                appState.syncRateMs = Number(syncRateRec.value);
+                document.getElementById('settingSyncRate').value = String(appState.syncRateMs);
+            }
+
             const sub = await idb.get('subscription', 'active_plan');
             if (sub) {
                 appState.subscription = sub;
@@ -692,7 +801,6 @@
                 updateSubscriptionUI(sub);
             }
 
-            // 3. Watchlist, Likes, Offline
             appState.watchlist = await idb.getAll('watchlist');
             appState.likes = await idb.getAll('likes');
             appState.offline = await idb.getAll('offline');
@@ -701,40 +809,58 @@
             if (appState.offline.length > 0) renderOfflineRows();
         }
 
+        function updateSyncBadge(status, text) {
+            const dot = document.getElementById('syncDot');
+            const txt = document.getElementById('syncText');
+            if (!dot || !txt) return;
+
+            if (status === 'connected') {
+                dot.className = "w-2 h-2 rounded-full bg-green-500 animate-pulse";
+                txt.className = "text-green-400 font-mono font-bold";
+                txt.innerText = text || "24/7 LIVE CONNECTED";
+            } else if (status === 'connecting') {
+                dot.className = "w-2 h-2 rounded-full bg-yellow-500 animate-ping";
+                txt.className = "text-yellow-400 font-mono";
+                txt.innerText = text || "PRIPÁJAM...";
+            } else if (status === 'error') {
+                dot.className = "w-2 h-2 rounded-full bg-red-500";
+                txt.className = "text-red-500 font-mono font-bold";
+                txt.innerText = text || "API CHYBA (F12)";
+            } else {
+                dot.className = "w-2 h-2 rounded-full bg-gray-500";
+                txt.className = "text-gray-400 font-mono";
+                txt.innerText = text || "BEZ KĽÚČA";
+            }
+        }
+
         /**
-         * 4. 24/7 LIVE SYNCHRONIZATION ENGINE
+         * 5. 24/7 LIVE SYNCHRONIZATION ENGINE
          */
         function start24_7SyncEngine() {
             if (appState.syncInterval) clearInterval(appState.syncInterval);
 
-            // Synchronizačná slučka každých 60 sekúnd pre neustále vyhľadávanie nových filmov
             appState.syncInterval = setInterval(async () => {
                 if (!appState.apiKey) return;
                 
+                logToTerminal('REQ', '24/7 Background Sync: Kontrolujem nové filmy...');
+                updateSyncBadge('connecting', 'SYNCHRONIZUJEM...');
+                
                 try {
-                    // Synchronizácia najnovších CZ filmov a 4K noviniek
-                    const latestMovies = await queryYouTubeAPI("celý film cz dabing 2024", 4);
+                    const latestMovies = await queryYouTubeAPI("celý film cz dabing 2024", 4, 'date');
                     if (latestMovies && latestMovies.length > 0) {
                         for (let m of latestMovies) {
                             await idb.set('cachedSync', m);
                         }
-                        
-                        // Pridanie notifikácie o synchronizácii
-                        const notifList = document.getElementById('notifList');
-                        const item = document.createElement('div');
-                        item.className = "p-2 bg-neutral-800/80 rounded-lg text-green-400 font-semibold";
-                        item.innerHTML = `<i class="fa-solid fa-arrows-rotate mr-1"></i> 24/7 Sync: Pridaný nový film "${latestMovies[0].title.slice(0, 20)}..."`;
-                        notifList.prepend(item);
-                        document.getElementById('notifBadge').classList.remove('hidden');
+                        updateSyncBadge('connected', '24/7 LIVE CONNECTED');
                     }
                 } catch (e) {
-                    console.log("Background sync active...");
+                    logToTerminal('ERROR', '24/7 Background Sync zlyhal', e.message);
                 }
-            }, 60000);
+            }, appState.syncRateMs);
         }
 
         /**
-         * 5. SUBSCRIPTION LIVE TIMER & EXPIRATION PURGE
+         * 6. SUBSCRIPTION CLOCK & PURGE
          */
         function startSubscriptionLiveClock() {
             if (appState.liveTimerInterval) clearInterval(appState.liveTimerInterval);
@@ -751,6 +877,7 @@
                     appState.isPro = false;
                     updateSubscriptionUI(null);
                     showToast("⚠️ Vaše PRO predplatné vypršalo a bolo odstránené z databázy!", "error");
+                    logToTerminal('WARN', 'Predplatné expirovalo a bolo vymazané z IndexedDB.');
                     clearInterval(appState.liveTimerInterval);
                 } else {
                     const hours = Math.floor(timeLeft / (1000 * 60 * 60));
@@ -783,38 +910,67 @@
         }
 
         /**
-         * 6. YOUTUBE API QUERIES
+         * 7. YOUTUBE API QUERIES WITH DUAL CONSOLE LOGGING
          */
-        async function queryYouTubeAPI(query, max = 8) {
-            if (!appState.apiKey) return null;
+        async function queryYouTubeAPI(query, max = 8, order = 'relevance') {
+            if (!appState.apiKey) {
+                logToTerminal('WARN', `Dotaz "${query}" preskočený - chýba API kľúč.`);
+                return null;
+            }
+
+            const timestamp = Date.now();
+            const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&videoDuration=long&order=${order}&maxResults=${max}&key=${appState.apiKey}&_t=${timestamp}`;
+
+            logToTerminal('REQ', `Volám YouTube API: "${query}" (Zoradenie: ${order})`);
+            console.log(`📡 [YouTube API Volanie]: Hľadám "${query}"...`);
+
             try {
-                const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&videoDuration=long&maxResults=${max}&key=${appState.apiKey}`;
                 const res = await fetch(url);
+                
+                if (!res.ok) {
+                    const errorJson = await res.json().catch(() => ({}));
+                    const errMsg = `HTTP ${res.status} (${res.statusText})`;
+                    logToTerminal('ERROR', `YouTube API Volanie Zlyhalo: ${errMsg}`, errorJson);
+                    console.error(`🔴 [YouTube API Chyba]: ${errMsg}`, errorJson);
+
+                    updateSyncBadge('error', `API CHYBA (${res.status})`);
+                    showToast(`Chyba API (${res.status}) - Skontrolujte Konzolu!`, 'error');
+                    return null;
+                }
+
                 const data = await res.json();
-                if (data.items) {
+                const count = data.items ? data.items.length : 0;
+                logToTerminal('SUCCESS', `Získaných ${count} filmov pre "${query}"`);
+                console.log(`✅ [YouTube API Úspech]: Získaných ${count} filmov pre dotaz: "${query}"`);
+
+                updateSyncBadge('connected', '24/7 LIVE CONNECTED');
+
+                if (data.items && data.items.length > 0) {
                     return data.items.map(item => ({
                         id: item.id.videoId,
                         title: item.snippet.title,
                         desc: item.snippet.description,
                         thumb: item.snippet.thumbnails.high ? item.snippet.thumbnails.high.url : item.snippet.thumbnails.medium.url,
                         match: Math.floor(Math.random() * 8) + 92,
-                        year: 2024
+                        year: new Date(item.snippet.publishedAt).getFullYear() || 2024
                     }));
                 }
-            } catch (e) {
-                console.warn("YouTube API error:", e);
+            } catch (err) {
+                logToTerminal('ERROR', `Sieťová chyba pripojenia: ${err.message}`);
+                console.error("💥 [YouTube API Sieťová Chyba]:", err);
+                updateSyncBadge('error', 'SIEŤOVÁ CHYBA');
             }
             return null;
         }
 
         async function initAppContent() {
-            // Načítanie filmov s CZ Dabingom
-            const czDabingMovies = await queryYouTubeAPI("celý film cz dabing 4k") || CURATED_CATALOG.czDabing;
-            const gaming = await queryYouTubeAPI("Game Full Movie 4K 60fps") || CURATED_CATALOG.gaming;
-            const trending = await queryYouTubeAPI("Full Movies Cinema 2024") || CURATED_CATALOG.trending;
-            const action = await queryYouTubeAPI("Sci-Fi Action Full Movie 4K") || CURATED_CATALOG.action;
+            logToTerminal('INFO', 'Začínam načítavať kategórie a odporúčané filmy...');
             
-            // AI Odporúčací algoritmus
+            const czDabingMovies = await queryYouTubeAPI("celý film cz dabing 4k", 8, 'date') || CURATED_CATALOG.czDabing;
+            const gaming = await queryYouTubeAPI("Game Full Movie 4K 60fps", 8, 'date') || CURATED_CATALOG.gaming;
+            const trending = await queryYouTubeAPI("Full Movies Cinema 2024", 8, 'relevance') || CURATED_CATALOG.trending;
+            const action = await queryYouTubeAPI("Sci-Fi Action Full Movie 4K", 8, 'date') || CURATED_CATALOG.action;
+            
             const history = await idb.getAll('history');
             let recoQuery = "Top Blockbuster Cinema Movies";
             if (history.length > 0) {
@@ -822,7 +978,7 @@
                 recoQuery = `${last.title.split(' ')[0]} Full Movie`;
                 document.getElementById('recTitle').innerText = `Pretože ste pozerali: "${last.title.slice(0, 20)}..."`;
             }
-            const recommended = await queryYouTubeAPI(recoQuery) || CURATED_CATALOG.recommended;
+            const recommended = await queryYouTubeAPI(recoQuery, 8) || CURATED_CATALOG.recommended;
 
             renderRow('rowCzDabing', czDabingMovies);
             renderRow('rowRecommended', recommended);
@@ -852,7 +1008,7 @@
         }
 
         /**
-         * 7. MOVIE CARDS & ROW RENDERING
+         * 8. MOVIE CARDS & ROW RENDERING
          */
         function renderRow(containerId, movies) {
             const container = document.getElementById(containerId);
@@ -897,7 +1053,7 @@
         }
 
         /**
-         * 8. PLAYER, WATCHLIST & OFFLINE ENGINE
+         * 9. PLAYER, WATCHLIST & OFFLINE ENGINE
          */
         async function openPlayer(movie) {
             appState.activeVideo = movie;
@@ -909,6 +1065,7 @@
 
             updateModalButtons(movie);
             openModal('playerModal');
+            logToTerminal('INFO', `Prehrávam: "${movie.title}"`);
         }
 
         function playMovie(id) {
@@ -1043,7 +1200,7 @@
         }
 
         /**
-         * 9. PAYMENT & CHECKOUT
+         * 10. PAYMENT GATEWAY SIMULATION
          */
         let currentCheckout = {};
 
@@ -1079,6 +1236,7 @@
                 startSubscriptionLiveClock();
 
                 btn.innerHTML = `<i class="fa-solid fa-check"></i> Platba Úspešná!`;
+                logToTerminal('SUCCESS', `Aktivované predplatné: ${subRecord.planName}`);
                 
                 setTimeout(() => {
                     closeModal('paymentModal');
@@ -1091,7 +1249,7 @@
         }
 
         /**
-         * 10. SEARCH & CATEGORIES (WITH CZ DABING ENGINE)
+         * 11. SEARCH & CATEGORIES
          */
         function setupSearchListener() {
             let timeout;
@@ -1106,9 +1264,8 @@
                 timeout = setTimeout(async () => {
                     if (val.length >= 2) {
                         showToast(`Prehľadávam YouTube pre "${val}"...`, "info");
-                        // Vyhľadávanie optimalizované aj pre český dabing a celé filmy
                         const query = val.toLowerCase().includes('cz') || val.toLowerCase().includes('dabing') ? val : `${val} celý film cz dabing cinema`;
-                        const res = await queryYouTubeAPI(query) || [];
+                        const res = await queryYouTubeAPI(query, 8, 'relevance') || [];
                         if (res.length > 0) {
                             renderRow('rowRecommended', res);
                             document.getElementById('recTitle').innerText = `Výsledky hľadania: "${val}"`;
@@ -1137,7 +1294,7 @@
             }
 
             showToast(`Filtrujem kategóriu: ${categoryQuery}...`, 'info');
-            const movies = await queryYouTubeAPI(categoryQuery);
+            const movies = await queryYouTubeAPI(categoryQuery, 8, 'date');
             if (movies && movies.length > 0) {
                 renderRow('rowRecommended', movies);
                 document.getElementById('recTitle').innerText = `Kategória: ${categoryQuery}`;
@@ -1146,7 +1303,51 @@
         }
 
         /**
-         * 11. API KEY & 24/7 SYNC CONFIG
+         * 12. SETTINGS & APP CONFIGURATION HANDLERS
+         */
+        async function saveAppSettings() {
+            const syncRate = document.getElementById('settingSyncRate').value;
+            const czPref = document.getElementById('settingCzPref').checked;
+
+            appState.syncRateMs = Number(syncRate);
+            appState.czPref = czPref;
+
+            await idb.set('settings', { id: 'sync_rate', value: syncRate });
+            await idb.set('settings', { id: 'cz_pref', value: czPref });
+
+            start24_7SyncEngine();
+            closeModal('settingsModal');
+            showToast("Nastavenia boli úspešne uložené do IndexedDB!", "success");
+            logToTerminal('SUCCESS', `Nastavenia uložené: Sync Rate=${syncRate}ms, CZ Pref=${czPref}`);
+        }
+
+        async function clearCacheOnly() {
+            await idb.clear('cachedSync');
+            showToast("Medzipamäť synchronizovaných filmov bola vyčistená.", "info");
+            logToTerminal('INFO', 'Cache filmov vyčistená.');
+        }
+
+        async function exportDatabaseJSON() {
+            const backup = {
+                settings: await idb.getAll('settings'),
+                subscription: await idb.getAll('subscription'),
+                watchlist: await idb.getAll('watchlist'),
+                history: await idb.getAll('history'),
+                likes: await idb.getAll('likes'),
+                offline: await idb.getAll('offline')
+            };
+
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backup, null, 2));
+            const dl = document.createElement('a');
+            dl.setAttribute("href", dataStr);
+            dl.setAttribute("download", `bannatube_backup_${Date.now()}.json`);
+            dl.click();
+            showToast("Záloha databázy bola stiahnutá ako JSON.", "success");
+            logToTerminal('SUCCESS', 'Exportovaná kompletná záloha IndexedDB.');
+        }
+
+        /**
+         * 13. API KEY CONFIG
          */
         async function saveApiKey() {
             const val = document.getElementById('apiKeyInput').value.trim();
@@ -1156,9 +1357,11 @@
             }
             await idb.set('settings', { id: 'yt_api_key', value: val });
             appState.apiKey = val;
-            document.getElementById('syncIndicator').classList.remove('hidden');
+            updateSyncBadge('connecting', 'OVERUJEM SPOJENIE...');
             closeModal('apiModal');
-            showToast("24/7 Live Synchronizácia filmov bola úspešne spustená!", "success");
+            showToast("24/7 Live Synchronizácia bola spustená! Sledujte Konzolu.", "success");
+            
+            logToTerminal('INFO', `Nový API kľúč nastavený: ${val.slice(0, 8)}...`);
             initAppContent();
             start24_7SyncEngine();
         }
@@ -1176,7 +1379,7 @@
         }
 
         /**
-         * 12. UI HELPERS & SYNTHESIZED TA-DUM AUDIO
+         * 14. UI HELPERS & SYNTHESIZED TA-DUM AUDIO
          */
         function openModal(id) {
             document.getElementById(id).classList.remove('hidden');
@@ -1188,16 +1391,6 @@
         function scrollRow(rowId, direction) {
             const el = document.getElementById(rowId);
             el.scrollBy({ left: direction * 450, behavior: 'smooth' });
-        }
-
-        function toggleNotifications() {
-            const drop = document.getElementById('notifDropdown');
-            drop.classList.toggle('hidden');
-            document.getElementById('notifBadge').classList.add('hidden');
-        }
-
-        function clearNotifs() {
-            document.getElementById('notifList').innerHTML = `<p class="text-gray-500 text-center py-2">Žiadne nové oznámenia.</p>`;
         }
 
         function navigateHome() {
@@ -1242,7 +1435,6 @@
             });
         }
 
-        // Web Audio API Synthesized Netflix "Ta-Dum" Audio
         function playNetflixTaDum() {
             try {
                 const AudioCtx = window.AudioContext || window.webkitAudioContext;
