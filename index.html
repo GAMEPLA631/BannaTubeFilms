@@ -117,8 +117,8 @@
             
             <!-- LIVE REFRESH SYNC STATUS BADGE -->
             <div id="syncIndicator" class="flex items-center gap-1.5 bg-neutral-900/90 border border-neutral-800 px-2.5 py-1 rounded-full text-[10px] font-mono text-gray-400 cursor-pointer" onclick="toggleConsoleDrawer()" title="Kliknite pre otvorenie živej konzoly">
-                <span id="syncDot" class="w-2 h-2 rounded-full bg-gray-500"></span>
-                <span id="syncText">SYNC PRI ŠTARTE...</span>
+                <span id="syncDot" class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                <span id="syncText">YOUTUBE LIVE STREAM</span>
             </div>
 
             <!-- LIVE CONSOLE BUTTON -->
@@ -134,7 +134,7 @@
 
             <!-- Search Bar -->
             <div class="relative flex items-center">
-                <input id="searchInput" type="text" placeholder="Hľadať filmy, CZ dabing, horory, čínske..." 
+                <input id="searchInput" type="text" placeholder="Hľadať filmy z celého sveta, dabing, horory..." 
                     class="bg-black/60 border border-neutral-700 text-white text-xs md:text-sm rounded-full pl-9 pr-8 py-1.5 focus:outline-none focus:border-red-600 focus:bg-black/90 w-36 md:w-56 transition-all duration-300 backdrop-blur-md">
                 <i class="fa-solid fa-magnifying-glass absolute left-3 text-gray-400 text-xs pointer-events-none"></i>
                 <button id="searchClearBtn" onclick="clearSearch()" class="absolute right-2.5 text-gray-400 hover:text-white hidden cursor-pointer"><i class="fa-solid fa-xmark text-xs"></i></button>
@@ -281,7 +281,7 @@
         <section class="space-y-2 row-group relative">
             <div class="flex items-center justify-between pr-6 md:pr-12">
                 <h2 class="text-lg md:text-xl font-extrabold tracking-wide flex items-center gap-2">
-                    <span id="recTitle">Odporúčané špeciálne pre Vás</span>
+                    <span id="recTitle">Svetová Kinematografia (YouTube Cinema)</span>
                     <span class="text-[10px] bg-red-600/20 text-red-500 border border-red-600/40 px-2 py-0.5 rounded-full font-mono font-bold">AI SMART ALGORITHM</span>
                 </h2>
             </div>
@@ -573,8 +573,8 @@
             <div class="space-y-4 text-xs">
                 <div class="flex items-center justify-between bg-neutral-950 p-3 rounded-xl border border-neutral-800">
                     <div>
-                        <p class="font-bold text-white">Synchronizácia pri obnovení stránky</p>
-                        <p class="text-gray-400 text-[11px]">Nové filmy sa načítajú vždy automaticky pri štarte/obnovení (F5)</p>
+                        <p class="font-bold text-white">Globálny YouTube Film Streamer</p>
+                        <p class="text-gray-400 text-[11px]">Automatické vyhľadávanie celých filmov a CZ dabingu z celého sveta</p>
                     </div>
                     <span class="text-green-400 font-mono text-xs font-bold"><i class="fa-solid fa-check mr-1"></i>AKTÍVNE</span>
                 </div>
@@ -685,7 +685,7 @@
 
         async function initDB() {
             if (db) return db;
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 const request = indexedDB.open(DB_NAME, DB_VERSION);
                 request.onupgradeneeded = (e) => {
                     const database = e.target.result;
@@ -704,7 +704,7 @@
             async set(storeName, item) {
                 if (!db) await initDB();
                 if (!db) return false;
-                return new Promise((resolve, reject) => {
+                return new Promise((resolve) => {
                     try {
                         const tx = db.transaction(storeName, 'readwrite');
                         tx.objectStore(storeName).put(item);
@@ -718,7 +718,7 @@
             async get(storeName, id) {
                 if (!db) await initDB();
                 if (!db) return null;
-                return new Promise((resolve, reject) => {
+                return new Promise((resolve) => {
                     try {
                         const tx = db.transaction(storeName, 'readonly');
                         const req = tx.objectStore(storeName).get(id);
@@ -732,7 +732,7 @@
             async getAll(storeName) {
                 if (!db) await initDB();
                 if (!db) return [];
-                return new Promise((resolve, reject) => {
+                return new Promise((resolve) => {
                     try {
                         const tx = db.transaction(storeName, 'readonly');
                         const req = tx.objectStore(storeName).getAll();
@@ -746,7 +746,7 @@
             async delete(storeName, id) {
                 if (!db) await initDB();
                 if (!db) return false;
-                return new Promise((resolve, reject) => {
+                return new Promise((resolve) => {
                     try {
                         const tx = db.transaction(storeName, 'readwrite');
                         tx.objectStore(storeName).delete(id);
@@ -760,7 +760,7 @@
             async clear(storeName) {
                 if (!db) await initDB();
                 if (!db) return false;
-                return new Promise((resolve, reject) => {
+                return new Promise((resolve) => {
                     try {
                         const tx = db.transaction(storeName, 'readwrite');
                         tx.objectStore(storeName).clear();
@@ -774,7 +774,7 @@
         };
 
         /**
-         * 3. GLOBAL APP STATE & CATALOG WITH VIP EXCLUSIVE CONTENT
+         * 3. GLOBAL APP STATE & MASSIVE WORLDWIDE CURATED CATALOG
          */
         let appState = {
             apiKey: '',
@@ -791,22 +791,33 @@
 
         const CURATED_CATALOG = {
             czDabing: [
-                { id: "L61p2uyu3G0", title: "GTA V: Celý Film (CZ Dabing/Titulky)", desc: "Kompletný kinematický zostrih Los Santos s českými dialógmi v 4K 60FPS.", thumb: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&q=80", match: 99, year: 2024, isVip: false },
-                { id: "d1Z5GgRPhgU", title: "Red Dead Redemption 2: Film (CZ Dabing)", desc: "Epický westernový film v plnom 4K rozlíšení s kompletným príbehom Arthura Morgana.", thumb: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&q=80", match: 98, year: 2023, isVip: false }
+                { id: "L61p2uyu3G0", title: "GTA V: Celý Film (CZ Dabing)", desc: "Kompletný príbehový film Los Santos s českým dabingom a dialógmi v 4K 60FPS.", thumb: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&q=80", match: 99, year: 2024, isVip: false },
+                { id: "d1Z5GgRPhgU", title: "Red Dead Redemption 2: Film (CZ Dabing)", desc: "Epický westernový film v plnom 4K rozlíšení s kompletným príbehom Arthura Morgana.", thumb: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&q=80", match: 98, year: 2023, isVip: false },
+                { id: "e-ORhEE9VVg", title: "Mafia Definitive Edition: Celý Film (CZ Dabing)", desc: "Kompletný český dabing ikonického príbehu Tommyho Angela.", thumb: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&q=80", match: 99, year: 2024, isVip: false },
+                { id: "kJQP7kiw5Fk", title: "Rýchlo a Zbesilo: Nebezpečná Jazda (CZ)", desc: "Celovečerný akčný adrenalínový film s plným českým audiom.", thumb: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800&q=80", match: 96, year: 2023, isVip: false },
+                { id: "YoHD9XEInc0", title: "Posledný Samuraj: Cesta Bojovníka (CZ Dabing)", desc: "Historický celovečerný film o cti a meči v plnom dabingu.", thumb: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&q=80", match: 97, year: 2024, isVip: false }
             ],
             chinese: [
                 { id: "ePbKGoIGAXY", title: "Ip Man: Legenda Kung-Fu Majstra (4K VIP)", desc: "Nezabudnuteľné bojové umenie Wing Chun v exkluzívnej 4K HDR verzii pre predplatiteľov.", thumb: "https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&q=80", match: 98, year: 2024, isVip: true },
-                { id: "kJQP7kiw5Fk", title: "Wuxia: Meč Dračieho Cisára (VIP Edition)", desc: "Staroveká čínska dynastia a boj šermiarskych klanov o trón.", thumb: "https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?w=800&q=80", match: 95, year: 2023, isVip: true }
+                { id: "kJQP7kiw5Fk", title: "Wuxia: Meč Dračieho Cisára (VIP Edition)", desc: "Staroveká čínska dynastia a boj šermiarskych klanov o trón.", thumb: "https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?w=800&q=80", match: 95, year: 2023, isVip: true },
+                { id: "7r1_p1VfWqE", title: "Tieň Ninja: Majster Bojových Umení (4K)", desc: "Epické súboje v bambusových lesoch a tajné techniky Shaolinu.", thumb: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&q=80", match: 97, year: 2024, isVip: true },
+                { id: "8Qn_spdM5Zg", title: "Dračí Chrám: Prebudenie Legendy (VIP)", desc: "Tradičné čínske wuxia kino s akrobatickými šermiarskymi scénami.", thumb: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80", match: 94, year: 2023, isVip: true }
             ],
             horror: [
                 { id: "YoHD9XEInc0", title: "Kliatba Lesného Domu (Full Horror 4K VIP)", desc: "Skupina priateľov objaví opustenú chatu, v ktorej prebýva temná entita. Iba pre PRO predplatiteľov.", thumb: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=800&q=80", match: 97, year: 2024, isVip: true },
-                { id: "7r1_p1VfWqE", title: "Paranormálny Experiment: Záznamy (VIP)", desc: "Skutočné nájdené zábery z psychiatrickej liečebne.", thumb: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&q=80", match: 94, year: 2023, isVip: true }
+                { id: "7r1_p1VfWqE", title: "Paranormálny Experiment: Záznamy (VIP)", desc: "Skutočné nájdené zábery z psychiatrickej liečebne plnej nevysvetliteľných javov.", thumb: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&q=80", match: 94, year: 2023, isVip: true },
+                { id: "kJQP7kiw5Fk", title: "Temná Noc v Údolí Tieňov (4K Horror)", desc: "Desivý hororový príbeh z odľahlého mestečka, kde po zotmení nikto nevychádza.", thumb: "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=800&q=80", match: 96, year: 2024, isVip: true },
+                { id: "d1Z5GgRPhgU", title: "Duchovia Starého Sanatória (Full Movie)", desc: "Strašidelný dom ukrývajúci tajomstvá minulosti.", thumb: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&q=80", match: 93, year: 2023, isVip: true }
             ],
             recommended: [
-                { id: "8Qn_spdM5Zg", title: "Interstellar: Vesmírna Odysea 4K", desc: "Cesta červou dierou za záchranu ľudstva.", thumb: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80", match: 99, year: 2024, isVip: false }
+                { id: "8Qn_spdM5Zg", title: "Interstellar: Vesmírna Odysea 4K", desc: "Cesta červou dierou za záchranu ľudstva v plnom 4K rozlíšení.", thumb: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&q=80", match: 99, year: 2024, isVip: false },
+                { id: "ePbKGoIGAXY", title: "Kybernetická Budúcnosť 2099 (Sci-Fi Cinema)", desc: "Futuristický film o umelej inteligencii a boji o prežitie človeka.", thumb: "https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?w=800&q=80", match: 98, year: 2024, isVip: false },
+                { id: "L61p2uyu3G0", title: "Záchranná Misia: Posledný Výsadok (Action)", desc: "Elitná jednotka v nepriateľskom tyle s nebezpečnou misiou.", thumb: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&q=80", match: 95, year: 2023, isVip: false }
             ],
             gaming: [
-                { id: "Y5qa430mXyU", title: "God of War Ragnarok: Kompletný Film", desc: "Kratos a Atreus čelia severským bohom.", thumb: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&q=80", match: 99, year: 2024, isVip: false }
+                { id: "Y5qa430mXyU", title: "God of War Ragnarok: Kompletný Film", desc: "Kratos a Atreus čelia severským bohom v 4K 60FPS.", thumb: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&q=80", match: 99, year: 2024, isVip: false },
+                { id: "e-ORhEE9VVg", title: "The Last of Us Part I: Príbehový Kinofilm", desc: "Emotívna cesta Joela a Ellie cez zničenú Ameriku.", thumb: "https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&q=80", match: 98, year: 2024, isVip: false },
+                { id: "d1Z5GgRPhgU", title: "Cyberpunk 2077: Phantom Liberty Movie", desc: "Kinematografický zážitok z Night City v plnom 4K.", thumb: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=800&q=80", match: 97, year: 2023, isVip: false }
             ]
         };
 
@@ -1038,16 +1049,16 @@
         }
 
         /**
-         * 7. REFRESH & YOUTUBE API ENGINE
+         * 7. REFRESH & EXPANDED YOUTUBE WORLD API ENGINE
          */
         async function syncOnScreenRefresh() {
-            logToTerminal('REQ', 'Obnovenie: Načítavam filmy a VIP katalóg...');
+            logToTerminal('REQ', 'Obnovenie: Načítavam celosvetové filmy a VIP katalóg z YouTube...');
             
-            const czDabing = await queryYouTubeAPI("celý film cz dabing 4k", 8, 'date') || CURATED_CATALOG.czDabing;
-            const chinese = await queryYouTubeAPI("Chinese Martial Arts Kung Fu Full Movie 4K", 8, 'date', true) || CURATED_CATALOG.chinese;
-            const horror = await queryYouTubeAPI("Full Horror Movie 4K Cinema", 8, 'date', true) || CURATED_CATALOG.horror;
-            const recommended = await queryYouTubeAPI("Top Blockbuster Cinema Movies", 8) || CURATED_CATALOG.recommended;
-            const gaming = await queryYouTubeAPI("Game Full Movie 4K 60fps", 8, 'date') || CURATED_CATALOG.gaming;
+            const czDabing = await queryYouTubeAPI("celý film cz dabing 4k", 10, 'date') || CURATED_CATALOG.czDabing;
+            const chinese = await queryYouTubeAPI("Chinese Martial Arts Kung Fu Full Movie 4K", 10, 'date', true) || CURATED_CATALOG.chinese;
+            const horror = await queryYouTubeAPI("Full Horror Movie 4K Cinema English Subtitles", 10, 'date', true) || CURATED_CATALOG.horror;
+            const recommended = await queryYouTubeAPI("Full Length Feature Movies HD Cinema", 10, 'relevance') || CURATED_CATALOG.recommended;
+            const gaming = await queryYouTubeAPI("Game Full Movie 4K 60fps", 10, 'date') || CURATED_CATALOG.gaming;
 
             renderRow('rowCzDabing', czDabing);
             renderRow('rowChinese', chinese);
@@ -1056,10 +1067,10 @@
             renderRow('rowGaming', gaming);
 
             setHeroBillboard(czDabing[0] || CURATED_CATALOG.czDabing[0]);
-            logToTerminal('SUCCESS', 'Všetky filmové rady boli synchronizované.');
+            logToTerminal('SUCCESS', 'Všetky filmové rady z celého sveta boli synchronizované.');
         }
 
-        async function queryYouTubeAPI(query, max = 8, order = 'relevance', markAsVip = false) {
+        async function queryYouTubeAPI(query, max = 10, order = 'relevance', markAsVip = false) {
             if (!appState.apiKey) return null;
             const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&videoDuration=long&order=${order}&maxResults=${max}&key=${appState.apiKey}&_t=${Date.now()}`;
             try {
@@ -1068,9 +1079,9 @@
                 const data = await res.json();
                 return data.items.map(item => ({
                     id: item.id.videoId,
-                    title: item.snippet.title,
-                    desc: item.snippet.description,
-                    thumb: item.snippet.thumbnails.high ? item.snippet.thumbnails.high.url : item.snippet.thumbnails.medium.url,
+                    title: item.snippet.title.replace(/&amp;/g, '&').replace(/&quot;/g, '"'),
+                    desc: item.snippet.description || 'Oficiálny stream z YouTube',
+                    thumb: item.snippet.thumbnails.high ? item.snippet.thumbnails.high.url : (item.snippet.thumbnails.medium ? item.snippet.thumbnails.medium.url : `https://img.youtube.com/vi/${item.id.videoId}/hqdefault.jpg`),
                     match: Math.floor(Math.random() * 8) + 92,
                     year: 2024,
                     isVip: markAsVip
@@ -1159,7 +1170,7 @@
 
         function playMovie(id) {
             const allMovies = [...CURATED_CATALOG.czDabing, ...CURATED_CATALOG.chinese, ...CURATED_CATALOG.horror, ...CURATED_CATALOG.recommended, ...CURATED_CATALOG.gaming, ...appState.watchlist];
-            const m = allMovies.find(x => x.id === id) || { id, title: 'BannaTube Film', desc: 'Prehrávanie filmu', thumb: '', isVip: false };
+            const m = allMovies.find(x => x.id === id) || { id, title: 'BannaTube Film', desc: 'Prehrávanie filmu', thumb: `https://img.youtube.com/vi/${id}/hqdefault.jpg`, isVip: false };
             playNetflixTaDum();
             openPlayer(m);
         }
@@ -1291,7 +1302,7 @@
         }
 
         /**
-         * 10. SEARCH & CATEGORIES
+         * 10. SEARCH & CATEGORIES (SEARCHING ACROSS ALL YOUTUBE WORLD CONTENT)
          */
         function setupSearchListener() {
             let timeout;
@@ -1305,13 +1316,21 @@
                 timeout = setTimeout(async () => {
                     if (val.length >= 2) {
                         showToast(`Prehľadávam YouTube pre "${val}"...`, "info");
-                        const res = await queryYouTubeAPI(`${val} full movie cinema`, 8, 'relevance') || [];
+                        const res = await queryYouTubeAPI(`${val} full movie cinema`, 12, 'relevance') || [];
                         if (res.length > 0) {
                             renderRow('rowRecommended', res);
                             document.getElementById('recTitle').innerText = `Výsledky hľadania: "${val}"`;
+                        } else {
+                            // Lokálne dynamické hľadanie v katalógu
+                            const all = [...CURATED_CATALOG.czDabing, ...CURATED_CATALOG.chinese, ...CURATED_CATALOG.horror, ...CURATED_CATALOG.recommended, ...CURATED_CATALOG.gaming];
+                            const filtered = all.filter(m => m.title.toLowerCase().includes(val.toLowerCase()) || m.desc.toLowerCase().includes(val.toLowerCase()));
+                            if (filtered.length > 0) {
+                                renderRow('rowRecommended', filtered);
+                                document.getElementById('recTitle').innerText = `Výsledky hľadania: "${val}"`;
+                            }
                         }
                     }
-                }, 500);
+                }, 400);
             });
         }
 
@@ -1329,7 +1348,7 @@
             if (categoryQuery === 'all') { syncOnScreenRefresh(); return; }
             showToast(`Filtrujem kategóriu...`, 'info');
             const isVip = categoryQuery.includes('Horror') || categoryQuery.includes('Chinese');
-            const movies = await queryYouTubeAPI(categoryQuery, 8, 'date', isVip);
+            const movies = await queryYouTubeAPI(categoryQuery, 12, 'date', isVip);
             if (movies && movies.length > 0) {
                 renderRow('rowRecommended', movies);
                 document.getElementById('recTitle').innerText = `Kategória: ${categoryQuery}`;
