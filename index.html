@@ -143,8 +143,8 @@
 
             <!-- AUTH / USER PROFILE MENU -->
             <div id="authNavContainer">
-                <button id="loginTriggerBtn" onclick="openAuthModal('login')" class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-3.5 py-1.5 rounded-md transition shadow">
-                    Prihlásiť sa
+                <button id="loginTriggerBtn" onclick="openAuthModal('login')" class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-3.5 py-1.5 rounded-md transition shadow flex items-center gap-1.5">
+                    <i class="fa-solid fa-user text-xs"></i> Prihlásiť sa
                 </button>
 
                 <div id="userProfileDropdown" class="relative group hidden">
@@ -313,7 +313,7 @@
 
     </main>
 
-    <!-- ==================== UPGRADE & PRICING PLANS MODAL (4-5 FAJOK NA BALÍK) ==================== -->
+    <!-- ==================== UPGRADE & PRICING PLANS MODAL ==================== -->
     <div id="planModal" class="fixed inset-0 z-50 bg-black/90 hidden flex items-center justify-center p-4 overflow-y-auto backdrop-blur-xl">
         <div class="bg-neutral-950 border border-neutral-800 rounded-3xl max-w-5xl w-full p-6 md:p-8 space-y-6 shadow-2xl my-6">
             <div class="flex justify-between items-center border-b border-neutral-800 pb-4">
@@ -390,16 +390,19 @@
         </div>
     </div>
 
-    <!-- ==================== AUTHENTICATION MODAL ==================== -->
+    <!-- ==================== AUTHENTICATION MODAL (OPRAVENÉ TLAČIDLÁ) ==================== -->
     <div id="authModal" class="fixed inset-0 z-50 bg-black/90 hidden flex items-center justify-center p-4 backdrop-blur-xl">
         <div class="bg-neutral-900 border border-neutral-800 rounded-3xl max-w-md w-full p-6 md:p-8 space-y-6 shadow-2xl relative">
             <button onclick="closeModal('authModal')" class="absolute top-5 right-5 text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            
+            <!-- TABS -->
             <div class="flex border-b border-neutral-800 pb-2 space-x-4 text-sm font-bold">
-                <button id="authTabLogin" onclick="switchAuthTab('login')" class="text-white border-b-2 border-red-600 pb-2">Prihlásenie</button>
-                <button id="authTabRegister" onclick="switchAuthTab('register')" class="text-gray-400 hover:text-white pb-2">Registrácia</button>
-                <button id="authTabRecovery" onclick="switchAuthTab('recovery')" class="text-gray-400 hover:text-white pb-2 text-xs">Obnova Hesla</button>
+                <button type="button" id="authTabLogin" onclick="switchAuthTab('login')" class="text-white border-b-2 border-red-600 pb-2">Prihlásenie</button>
+                <button type="button" id="authTabRegister" onclick="switchAuthTab('register')" class="text-gray-400 hover:text-white pb-2">Registrácia</button>
+                <button type="button" id="authTabRecovery" onclick="switchAuthTab('recovery')" class="text-gray-400 hover:text-white pb-2 text-xs">Obnova Hesla</button>
             </div>
-            <!-- LOGIN -->
+
+            <!-- LOGIN FORM -->
             <form id="formLogin" onsubmit="handleUserLogin(event)" class="space-y-4 text-xs">
                 <div>
                     <label class="text-gray-300 block mb-1">Emailová adresa</label>
@@ -409,12 +412,14 @@
                     <label class="text-gray-300 block mb-1">Heslo</label>
                     <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full bg-neutral-950 border border-neutral-700 rounded-lg px-3.5 py-2.5 text-white focus:outline-none focus:border-red-600">
                 </div>
-                <div class="flex justify-between items-center text-[11px]">
-                    <a href="javascript:void(0)" onclick="switchAuthTab('recovery')" class="text-red-400 hover:underline">Zabudli ste heslo? (Kľúč od podpory)</a>
+                <div class="flex justify-between items-center text-[11px] pt-1">
+                    <button type="button" onclick="switchAuthTab('recovery')" class="text-red-400 hover:underline">Zabudli ste heslo?</button>
+                    <button type="button" onclick="switchAuthTab('register')" class="text-gray-400 hover:text-white">Nemáte účet? <b>Registrácia</b></button>
                 </div>
-                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl text-sm transition">Prihlásiť sa</button>
+                <button type="submit" id="loginSubmitBtn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl text-sm transition shadow-lg shadow-red-600/30">Prihlásiť sa</button>
             </form>
-            <!-- REGISTER -->
+
+            <!-- REGISTER FORM -->
             <form id="formRegister" onsubmit="handleUserRegister(event)" class="space-y-3.5 text-xs hidden">
                 <div>
                     <label class="text-gray-300 block mb-1">Používateľské meno</label>
@@ -428,11 +433,15 @@
                     <label class="text-gray-300 block mb-1">Heslo</label>
                     <input type="password" id="regPassword" required placeholder="Minimálne 6 znakov" class="w-full bg-neutral-950 border border-neutral-700 rounded-lg px-3.5 py-2.5 text-white focus:outline-none focus:border-red-600">
                 </div>
-                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl text-sm transition">Vytvoriť Účet</button>
+                <div class="text-[11px] text-right pt-1">
+                    <button type="button" onclick="switchAuthTab('login')" class="text-gray-400 hover:text-white">Už máte účet? <b>Prihláste sa</b></button>
+                </div>
+                <button type="submit" id="registerSubmitBtn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl text-sm transition shadow-lg shadow-red-600/30">Vytvoriť Účet</button>
             </form>
-            <!-- RECOVERY -->
+
+            <!-- RECOVERY FORM -->
             <form id="formRecovery" onsubmit="handlePasswordRecovery(event)" class="space-y-3.5 text-xs hidden">
-                <div class="bg-red-950/40 border border-red-800/60 p-3 rounded-xl text-gray-300 text-[11px]">
+                <div class="bg-red-950/40 border border-red-800/60 p-3 rounded-xl text-gray-300 text-[11px] leading-relaxed">
                     <i class="fa-solid fa-shield-halved text-red-500 mr-1"></i> Pre obnovu zadajte <b>Kľúč od podpory</b> pridelený administrátorom.
                 </div>
                 <div>
@@ -441,13 +450,16 @@
                 </div>
                 <div>
                     <label class="text-yellow-400 font-bold block mb-1"><i class="fa-solid fa-key mr-1"></i> Kľúč od Podpory (Master Key)</label>
-                    <input type="password" id="recSupportKey" required placeholder="BANNA-ROOT-..." class="w-full bg-neutral-950 border border-yellow-600/50 rounded-lg px-3.5 py-2.5 text-yellow-300 font-mono">
+                    <input type="password" id="recSupportKey" required placeholder="BANNA-ROOT-..." class="w-full bg-neutral-950 border border-yellow-600/50 rounded-lg px-3.5 py-2.5 text-yellow-300 font-mono focus:outline-none focus:border-yellow-500">
                 </div>
                 <div>
                     <label class="text-gray-300 block mb-1">Nové Heslo</label>
-                    <input type="password" id="recNewPassword" required placeholder="Nové heslo" class="w-full bg-neutral-950 border border-neutral-700 rounded-lg px-3.5 py-2.5 text-white">
+                    <input type="password" id="recNewPassword" required placeholder="Nové heslo" class="w-full bg-neutral-950 border border-neutral-700 rounded-lg px-3.5 py-2.5 text-white focus:outline-none focus:border-red-600">
                 </div>
-                <button type="submit" class="w-full bg-yellow-600 hover:bg-yellow-700 text-black font-black py-3 rounded-xl text-sm transition">Zmeniť Heslo</button>
+                <div class="text-[11px] text-right pt-1">
+                    <button type="button" onclick="switchAuthTab('login')" class="text-gray-400 hover:text-white">Späť na <b>Prihlásenie</b></button>
+                </div>
+                <button type="submit" id="recoverySubmitBtn" class="w-full bg-yellow-600 hover:bg-yellow-700 text-black font-black py-3 rounded-xl text-sm transition shadow-lg shadow-yellow-600/30">Zmeniť Heslo</button>
             </form>
         </div>
     </div>
@@ -571,7 +583,7 @@
     <div id="apiModal" class="fixed inset-0 z-50 bg-black/85 hidden flex items-center justify-center p-4 backdrop-blur-md">
         <div class="bg-neutral-900 border border-neutral-800 rounded-2xl max-w-md w-full p-6 space-y-4 shadow-2xl">
             <h3 class="text-lg font-bold flex items-center gap-2"><i class="fa-brands fa-youtube text-red-600"></i> YouTube API v3 Nastavenie</h3>
-            <input id="apiKeyInput" type="password" placeholder="AIzaSyA..." class="w-full bg-neutral-950 border border-neutral-700 rounded-lg px-3 py-2 text-sm text-white">
+            <input id="apiKeyInput" type="password" placeholder="AIzaSyA..." class="w-full bg-neutral-950 border border-neutral-700 rounded-lg px-3 py-2 text-sm text-white font-mono">
             <div class="flex justify-end space-x-2">
                 <button onclick="closeModal('apiModal')" class="bg-neutral-800 px-4 py-2 rounded-lg text-xs">Zavrieť</button>
                 <button onclick="saveApiKey()" class="bg-red-600 px-5 py-2 rounded-lg text-xs font-bold">Uložiť</button>
@@ -686,9 +698,6 @@
             ],
             gaming: [
                 { id: "Y5qa430mXyU", title: "God of War Ragnarok: Kompletný Film", desc: "Kratos a Atreus čelia severským bohom.", thumb: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&q=80", match: 99, year: 2024, isVip: false }
-            ],
-            trending: [
-                { id: "2Gg6Seob5Mg", title: "Dune 2: Púštna Planéta (Fan Cut)", desc: "Paul Atreides a boj o vesmír.", thumb: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=800&q=80", match: 98, year: 2024, isVip: false }
             ]
         };
 
@@ -706,6 +715,7 @@
             if (type === 'SUCCESS') tag += ` <span class="text-green-400 font-bold">✔ [API_OK]</span>`;
             else if (type === 'ERROR') tag += ` <span class="text-red-500 font-bold">✖ [API_ERR]</span>`;
             else if (type === 'REQ') tag += ` <span class="text-cyan-400 font-bold">➜ [HTTP_REQ]</span>`;
+            else if (type === 'AUTH') tag += ` <span class="text-purple-400 font-bold">🔐 [AUTH]</span>`;
             else if (type === 'VIP') tag += ` <span class="text-amber-400 font-bold">🔒 [VIP_LOCK]</span>`;
             else tag += ` <span class="text-yellow-400 font-bold">ℹ [SYSTEM]</span>`;
 
@@ -775,7 +785,7 @@
         }
 
         /**
-         * 6. AUTHENTICATION ENGINE
+         * 6. OPRAVENÉ PRIHLASOVANIE, REGISTRÁCIA A OBNOVA HESLA
          */
         function openAuthModal(tab = 'login') {
             switchAuthTab(tab);
@@ -783,10 +793,12 @@
         }
 
         function switchAuthTab(tab) {
-            ['Login', 'Register', 'Recovery'].forEach(t => {
-                const btn = document.getElementById(`authTab${t}`);
-                const form = document.getElementById(`form${t}`);
-                if (t.toLowerCase() === tab) {
+            const tabs = ['login', 'register', 'recovery'];
+            tabs.forEach(t => {
+                const cap = t.charAt(0).toUpperCase() + t.slice(1);
+                const btn = document.getElementById(`authTab${cap}`);
+                const form = document.getElementById(`form${cap}`);
+                if (t === tab) {
                     btn.className = "text-white border-b-2 border-red-600 pb-2";
                     form.classList.remove('hidden');
                 } else {
@@ -802,9 +814,15 @@
             const email = document.getElementById('regEmail').value.trim().toLowerCase();
             const password = document.getElementById('regPassword').value;
 
+            if (!username || !email || !password) {
+                showToast("Vyplňte všetky polia!", "error");
+                return;
+            }
+
             const existing = await idb.get('users', email);
             if (existing) {
                 showToast("Tento email je už zaregistrovaný!", "error");
+                logToTerminal('ERROR', `Registrácia zlyhala: Email ${email} už existuje`);
                 return;
             }
 
@@ -815,8 +833,8 @@
             appState.currentUser = newUser;
             updateAuthUI();
             closeModal('authModal');
-            showToast(`Vitajte, ${username}! Účet bol vytvorený.`, "success");
-            logToTerminal('SUCCESS', `Nový používateľ zaregistrovaný: ${email}`);
+            showToast(`Vitajte, ${username}! Registrácia bola úspešná.`, "success");
+            logToTerminal('AUTH', `Nový používateľ úspešne vytvorený: ${email}`);
         }
 
         async function handleUserLogin(e) {
@@ -824,10 +842,15 @@
             const email = document.getElementById('loginEmail').value.trim().toLowerCase();
             const password = document.getElementById('loginPassword').value;
 
+            if (!email || !password) {
+                showToast("Zadajte email a heslo!", "error");
+                return;
+            }
+
             const user = await idb.get('users', email);
             if (!user || user.password !== password) {
                 showToast("Nesprávny email alebo heslo!", "error");
-                logToTerminal('ERROR', `Neúspešné prihlásenie: ${email}`);
+                logToTerminal('ERROR', `Neúspešný pokus o prihlásenie pre: ${email}`);
                 return;
             }
 
@@ -836,7 +859,7 @@
             updateAuthUI();
             closeModal('authModal');
             showToast(`Vitajte späť, ${user.username}!`, "success");
-            logToTerminal('SUCCESS', `Prihlásený: ${email}`);
+            logToTerminal('AUTH', `Používateľ prihlásený: ${email}`);
         }
 
         async function handlePasswordRecovery(e) {
@@ -847,7 +870,7 @@
 
             if (supportKey !== MASTER_SUPPORT_RECOVERY_KEY) {
                 showToast("Neplatný Kľúč od Podpory! Kontaktujte administrátora.", "error");
-                logToTerminal('ERROR', `Neoprávnený pokus o obnovu účtu pre: ${email}`);
+                logToTerminal('ERROR', `Neplatný Master Kľúč pri obnove pre: ${email}`);
                 return;
             }
 
@@ -859,8 +882,8 @@
             }
 
             await idb.set('users', user);
-            showToast("Heslo bolo úspešne obnovené cez Kľúč podpory!", "success");
-            logToTerminal('SUCCESS', `Heslo resetované kľúčom pre: ${email}`);
+            showToast("Heslo bolo úspešne zmenené! Teraz sa môžete prihlásiť.", "success");
+            logToTerminal('AUTH', `Heslo úspešne obnovené kľúčom pre: ${email}`);
             switchAuthTab('login');
         }
 
@@ -868,7 +891,8 @@
             await idb.delete('settings', 'active_session');
             appState.currentUser = null;
             updateAuthUI();
-            showToast("Boli ste odhlásený.", "info");
+            showToast("Boli ste úspešne odhlásený.", "info");
+            logToTerminal('AUTH', 'Používateľ bol odhlásený.');
         }
 
         function updateAuthUI() {
@@ -889,10 +913,10 @@
         }
 
         /**
-         * 7. REFRESH SYNC & API LOGIC
+         * 7. REFRESH & YOUTUBE API ENGINE
          */
         async function syncOnScreenRefresh() {
-            logToTerminal('REQ', 'Obnovenie: Načítavam filmy a VIP zoznam...');
+            logToTerminal('REQ', 'Obnovenie: Načítavam filmy a VIP katalóg...');
             
             const czDabing = await queryYouTubeAPI("celý film cz dabing 4k", 8, 'date') || CURATED_CATALOG.czDabing;
             const chinese = await queryYouTubeAPI("Chinese Martial Arts Kung Fu Full Movie 4K", 8, 'date', true) || CURATED_CATALOG.chinese;
@@ -907,7 +931,7 @@
             renderRow('rowGaming', gaming);
 
             setHeroBillboard(czDabing[0] || CURATED_CATALOG.czDabing[0]);
-            logToTerminal('SUCCESS', 'Všetky kategórie boli načítané.');
+            logToTerminal('SUCCESS', 'Všetky filmové rady boli synchronizované.');
         }
 
         async function queryYouTubeAPI(query, max = 8, order = 'relevance', markAsVip = false) {
@@ -982,10 +1006,9 @@
         }
 
         /**
-         * 8. PLAYER & VIP ACCESS LOCK LOGIC
+         * 8. PLAYER & VIP ACCESS LOCK
          */
         async function openPlayer(movie) {
-            // Kontrola VIP prístupu pre prémiové filmy
             if (movie.isVip && !appState.isPro) {
                 logToTerminal('VIP', `Zablokovaný pokus o prehratie VIP filmu bez predplatného: "${movie.title}"`);
                 showToast("🔒 Tento film je dostupný výhradne pre predplatiteľov BannaTube PRO!", "error");
@@ -998,12 +1021,19 @@
             document.getElementById('playerDesc').innerText = movie.desc;
             document.getElementById('videoIframe').src = `https://www.youtube.com/embed/${movie.id}?autoplay=1&rel=0&modestbranding=1`;
             await idb.set('history', { id: movie.id, title: movie.title, thumb: movie.thumb, watchedAt: Date.now() });
+            
+            // Nastavenie tlačidla pre zoznam v prehrávači
+            const isSaved = appState.watchlist.some(w => w.id === movie.id);
+            const wBtn = document.getElementById('modalWatchlistBtn');
+            wBtn.innerHTML = isSaved ? `<i class="fa-solid fa-check text-green-400"></i> <span>V Zozname</span>` : `<i class="fa-solid fa-plus"></i> <span>Zoznam</span>`;
+            wBtn.onclick = () => toggleWatchlist(movie);
+
             openModal('playerModal');
-            logToTerminal('INFO', `Prehrávam film: "${movie.title}"`);
+            logToTerminal('INFO', `Prehrávam: "${movie.title}"`);
         }
 
         function playMovie(id) {
-            const allMovies = [...CURATED_CATALOG.czDabing, ...CURATED_CATALOG.chinese, ...CURATED_CATALOG.horror, ...CURATED_CATALOG.recommended, ...CURATED_CATALOG.gaming, ...CURATED_CATALOG.trending, ...appState.watchlist];
+            const allMovies = [...CURATED_CATALOG.czDabing, ...CURATED_CATALOG.chinese, ...CURATED_CATALOG.horror, ...CURATED_CATALOG.recommended, ...CURATED_CATALOG.gaming, ...appState.watchlist];
             const m = allMovies.find(x => x.id === id) || { id, title: 'BannaTube Film', desc: 'Prehrávanie filmu', thumb: '', isVip: false };
             playNetflixTaDum();
             openPlayer(m);
@@ -1026,10 +1056,14 @@
                 showToast(`Uložené do Môjho Zoznamu!`, 'success');
             }
             renderSavedRows();
+            if (appState.activeVideo && appState.activeVideo.id === movie.id) {
+                const inList = appState.watchlist.some(w => w.id === movie.id);
+                document.getElementById('modalWatchlistBtn').innerHTML = inList ? `<i class="fa-solid fa-check text-green-400"></i> <span>V Zozname</span>` : `<i class="fa-solid fa-plus"></i> <span>Zoznam</span>`;
+            }
         }
 
         function quickToggleWatchlist(id) {
-            const all = [...CURATED_CATALOG.czDabing, ...CURATED_CATALOG.chinese, ...CURATED_CATALOG.horror, ...CURATED_CATALOG.recommended, ...CURATED_CATALOG.gaming, ...CURATED_CATALOG.trending, ...appState.watchlist];
+            const all = [...CURATED_CATALOG.czDabing, ...CURATED_CATALOG.chinese, ...CURATED_CATALOG.horror, ...CURATED_CATALOG.recommended, ...CURATED_CATALOG.gaming, ...appState.watchlist];
             const m = all.find(x => x.id === id);
             if (m) toggleWatchlist(m);
         }
@@ -1055,7 +1089,7 @@
         }
 
         /**
-         * 9. SUBSCRIPTIONS & PAYMENT SIMULATION
+         * 9. SUBSCRIPTIONS & PAYMENT GATEWAY
          */
         function startSubscriptionLiveClock() {
             if (appState.liveTimerInterval) clearInterval(appState.liveTimerInterval);
@@ -1109,7 +1143,7 @@
         async function handlePaymentSubmit(e) {
             e.preventDefault();
             const btn = document.getElementById('paySubmitBtn');
-            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Spracovávam...`;
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Spracovávam platbu...`;
             btn.disabled = true;
 
             setTimeout(async () => {
@@ -1194,6 +1228,26 @@
             closeModal('apiModal');
             showToast("API Kľúč bol uložený!", "success");
             syncOnScreenRefresh();
+        }
+
+        async function clearCacheOnly() {
+            await idb.clear('cachedSync');
+            showToast("Cache filmov bola vyčistená.", "info");
+        }
+
+        async function exportDatabaseJSON() {
+            const backup = {
+                settings: await idb.getAll('settings'),
+                subscription: await idb.getAll('subscription'),
+                watchlist: await idb.getAll('watchlist'),
+                users: await idb.getAll('users')
+            };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backup, null, 2));
+            const dl = document.createElement('a');
+            dl.setAttribute("href", dataStr);
+            dl.setAttribute("download", `bannatube_backup_${Date.now()}.json`);
+            dl.click();
+            showToast("Záloha databázy bola stiahnutá.", "success");
         }
 
         async function wipeEntireDatabase() {
