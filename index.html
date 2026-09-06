@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&family=Fira+Code:wght@400;600&display=swap');
-        :root { --red: #E50914; --glow: rgba(229,9,20,0.5); --card: #111113; }
+        :root { --red: #E50914; --glow: rgba(229,9,20,0.5); }
         body { font-family: 'Montserrat', sans-serif; background: #060606; color: #fff; user-select: none; overflow-x: hidden; }
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: #080808; }
@@ -16,7 +16,6 @@
         ::-webkit-scrollbar-thumb:hover { background: var(--red); box-shadow: 0 0 10px var(--glow); }
         .hide-s::-webkit-scrollbar { display: none; }
         .hide-s { -ms-overflow-style: none; scrollbar-width: none; }
-        .glass { background: rgba(14,14,18,0.75); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.07); }
         .glass-red { background: rgba(26,10,12,0.85); backdrop-filter: blur(16px); border: 1px solid rgba(229,9,20,0.4); box-shadow: 0 0 25px rgba(229,9,20,0.2); }
         .hero-vig { background: linear-gradient(77deg, rgba(6,6,6,0.95) 0%, rgba(6,6,6,0.6) 45%, transparent 100%), linear-gradient(180deg, transparent 0%, rgba(6,6,6,0.7) 65%, #060606 100%); }
         .m-card { transition: transform 0.4s cubic-bezier(0.165,0.84,0.44,1), box-shadow 0.4s ease, border-color 0.3s ease; }
@@ -46,6 +45,7 @@
             </div>
         </div>
         <div class="flex items-center gap-2">
+            <span id="holidayBadge" class="hidden bg-red-600/30 border border-red-500 text-red-400 font-bold px-2 py-1 rounded text-[10px] animate-pulse">🎄 Vianočná Zľava -50%</span>
             <button onclick="openM('accM')" class="bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 text-black font-black px-3 py-1.5 rounded-lg shadow-lg text-[11px] flex items-center gap-1.5"><i class="fa-solid fa-wand-magic-sparkles"></i>Generovať VIP Účet</button>
             <button onclick="openM('banM')" class="bg-neutral-800 hover:bg-neutral-700 text-gray-200 px-3 py-1.5 rounded-lg border border-neutral-700 text-[11px] flex items-center gap-1"><i class="fa-solid fa-image text-cyan-400"></i>Banner</button>
         </div>
@@ -100,11 +100,11 @@
                     <img id="uAva" src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" class="w-8 h-8 rounded-full border-2 border-red-600 cursor-pointer object-cover shadow-md">
                     <div class="absolute right-0 mt-2 w-60 bg-neutral-950 border border-neutral-800 rounded-2xl shadow-2xl py-2 hidden group-hover:block text-xs z-50 backdrop-blur-2xl">
                         <div class="px-4 py-2 border-b border-neutral-800 bg-neutral-900/50">
-                            <p class="text-gray-400 text-[10px]">Profil:</p>
+                            <p class="text-gray-400 text-[10px]">Profil v Balíčku:</p>
                             <p id="pName" class="font-extrabold text-white text-sm">Návštevník</p>
                             <p id="pStat" class="text-red-500 font-bold text-xs mt-0.5">Free (5 filmov limit)</p>
-                            <p id="pTimer" class="text-[10px] font-mono text-amber-400 hidden mt-1"><i class="fa-solid fa-clock mr-1"></i><span id="tDown">--:--</span></p>
                         </div>
+                        <a href="javascript:void(0)" onclick="openM('planM')" class="flex items-center px-4 py-2 hover:bg-neutral-900 text-red-400 font-bold"><i class="fa-solid fa-crown mr-2"></i>Kúpiť Balík s PRO Profilom</a>
                         <a href="javascript:void(0)" onclick="openM('accM')" class="flex items-center px-4 py-2.5 hover:bg-neutral-900 text-yellow-400 font-bold"><i class="fa-solid fa-wand-magic-sparkles mr-2"></i>Generátor VIP Účtov</a>
                         <a href="javascript:void(0)" onclick="openM('banM')" class="flex items-center px-4 py-2.5 hover:bg-neutral-900 text-cyan-400"><i class="fa-solid fa-image mr-2"></i>Zmeniť Banner & Avatar</a>
                         <a href="javascript:void(0)" onclick="openM('apiM')" class="flex items-center px-4 py-2.5 hover:bg-neutral-900 text-amber-400"><i class="fa-solid fa-key mr-2"></i>Spravovať YouTube API</a>
@@ -114,15 +114,15 @@
             </div>
         </nav>
 
-        <!-- FREE 5-MOVIES LIMIT NOTIFICATION BANNER -->
+        <!-- FREE/PRO LIMIT BANNER -->
         <div id="fNotice" class="mx-4 md:mx-8 mt-3 p-3 rounded-xl glass-red flex flex-wrap items-center justify-between gap-2 text-xs">
             <div class="flex items-center gap-2">
                 <span class="w-7 h-7 rounded-lg bg-red-600/30 border border-red-500 flex items-center justify-center text-red-400"><i class="fa-solid fa-lock"></i></span>
-                <span><b>Režim FREE Účtu:</b> Prvých <b class="text-green-400">5 filmov máte zadarmo</b>. Ostatné filmy sú zamknuté 🔒.</span>
+                <span><b>Režim FREE Účtu:</b> Prvých <b class="text-green-400">5 filmov máte zadarmo</b>. Ostatné filmy a horory sú v platenom balíčku 🔒.</span>
             </div>
             <div class="flex gap-2">
                 <button onclick="openM('accM')" class="bg-amber-500 hover:bg-amber-400 text-black px-3 py-1 rounded-lg font-black text-xs"><i class="fa-solid fa-key mr-1"></i>Odomknúť VIP</button>
-                <button onclick="openM('planM')" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg font-bold text-xs">Kúpiť PRO</button>
+                <button onclick="openM('planM')" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-lg font-bold text-xs">Aktivovať PRO Balíček</button>
             </div>
         </div>
 
@@ -155,16 +155,12 @@
                     <button id="hInfo" class="bg-neutral-800/80 hover:bg-neutral-700 text-white p-3 rounded-full border border-neutral-700"><i class="fa-solid fa-circle-info"></i></button>
                 </div>
             </div>
-            <div class="absolute right-0 bottom-16 flex items-center space-x-3 pr-6 md:pr-10 z-20">
-                <button onclick="toggleAud()" id="audBtn" class="w-9 h-9 rounded-full border border-neutral-700 bg-black/60 flex items-center justify-center hover:border-red-600"><i class="fa-solid fa-volume-high text-xs"></i></button>
-                <span class="border-l-4 border-red-600 bg-neutral-950/90 px-3 py-1 text-xs font-black rounded-r">18+</span>
-            </div>
         </header>
 
         <!-- CAROUSELS -->
         <main class="relative z-20 -mt-12 md:-mt-20 space-y-8 md:space-y-12 pb-28 pl-4 md:pl-8">
             
-            <!-- SMART ALGORITHM ROW: NEWEST RELEASE (YOUTUBE PRO RECOMMENDATION) -->
+            <!-- SMART ALGORITHM: NEW RELEASES -->
             <section class="space-y-1.5 row-g relative">
                 <div class="flex items-center justify-between pr-6 md:pr-10">
                     <h2 class="text-base md:text-lg font-black tracking-wide flex items-center gap-2 text-red-500">
@@ -196,11 +192,7 @@
 
             <!-- CZ DABING -->
             <section class="space-y-1.5 row-g relative">
-                <div class="flex items-center justify-between pr-6 md:pr-10">
-                    <h2 class="text-base md:text-lg font-black tracking-wide flex items-center gap-2">
-                        <span class="text-red-500">🇨🇿</span> Filmy s Českým Dabingom & Titulkami
-                    </h2>
-                </div>
+                <h2 class="text-base md:text-lg font-black tracking-wide"><span class="text-red-500">🇨🇿</span> Filmy s Českým Dabingom & Titulkami</h2>
                 <div class="relative">
                     <button onclick="sRow('rCz', -1)" class="sl-btn absolute -left-3 top-0 bottom-0 z-40 bg-black/80 hover:bg-red-600 text-white w-9 flex items-center justify-center rounded-r-lg"><i class="fa-solid fa-chevron-left"></i></button>
                     <div id="rCz" class="flex space-x-3 overflow-x-auto py-3 pr-10 hide-s scroll-smooth"></div>
@@ -308,7 +300,7 @@
         </div>
     </div>
 
-    <!-- MODAL: ADVANCED NETFLIX 4K PLAYER WITH PLAYBACK CONTROLS -->
+    <!-- MODAL: ADVANCED NETFLIX 4K PLAYER -->
     <div id="playM" class="fixed inset-0 z-50 bg-black/95 hidden flex items-center justify-center p-2 md:p-6 backdrop-blur-2xl">
         <div id="pWrap" class="relative w-full max-w-5xl bg-neutral-950 border border-neutral-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[94vh]">
             <button onclick="closeP()" class="absolute top-3 right-3 z-50 text-white hover:text-red-500 bg-black/70 rounded-full w-9 h-9 flex items-center justify-center border border-neutral-700"><i class="fa-solid fa-xmark"></i></button>
@@ -317,7 +309,6 @@
                 <iframe id="vFrame" class="absolute inset-0 w-full h-full" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
 
-            <!-- PLAYER CONTROLS TOOLBAR -->
             <div class="bg-neutral-900 px-4 py-2.5 border-b border-neutral-800 flex flex-wrap items-center justify-between gap-2 text-xs">
                 <div class="flex items-center gap-2">
                     <button onclick="toggleAmbient()" id="ambBtn" class="bg-neutral-800 hover:bg-neutral-700 text-gray-200 px-2.5 py-1 rounded-lg border border-neutral-700 font-semibold"><i class="fa-solid fa-lightbulb text-yellow-400 mr-1"></i>Kino Efekt</button>
@@ -369,48 +360,144 @@
         </div>
     </div>
 
-    <!-- MODAL: UPGRADE PLANS -->
+    <!-- MODAL: UPGRADE PLANS WITH DETAILED BREAKDOWN & DYNAMIC PRICING -->
     <div id="planM" class="fixed inset-0 z-50 bg-black/90 hidden flex items-center justify-center p-4 overflow-y-auto backdrop-blur-xl">
         <div class="bg-neutral-950 border border-neutral-800 rounded-3xl max-w-4xl w-full p-6 space-y-5 shadow-2xl my-4 text-xs">
             <div class="flex justify-between items-center border-b border-neutral-800 pb-3">
                 <div>
                     <h2 class="text-xl font-black text-white">Balíky predplatného <span class="text-red-600">BannaTube PRO</span></h2>
-                    <p class="text-gray-400">Odomknite celú knižnicu, 4K kvalitu a sťahovanie offline.</p>
+                    <p class="text-gray-400" id="planNoticeText">Odomknite celú knižnicu, VIP PRO profil a 4K kvalitu.</p>
                 </div>
                 <button onclick="closeM('planM')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- BASIC -->
                 <div class="border border-neutral-800 rounded-2xl p-4 bg-neutral-900/40 flex flex-col justify-between">
-                    <div class="space-y-2">
-                        <h4 class="font-bold text-gray-200">Basic HD (720p)</h4>
-                        <div class="text-2xl font-black">4.99 € <span class="text-[10px] text-gray-400 font-normal">/ 30 dní</span></div>
-                        <ul class="space-y-1.5 text-gray-300 pt-2"><li><i class="fa-solid fa-check text-green-500 mr-1.5"></i>Všetky filmy odomknuté</li></ul>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <h4 class="font-bold text-gray-200">Basic HD</h4>
+                            <span class="text-[9px] bg-neutral-800 px-1.5 py-0.5 rounded text-gray-400">720p HD</span>
+                        </div>
+                        <div class="text-2xl font-black text-white"><span id="priceBasic">4.99</span> € <span class="text-[10px] text-gray-400 font-normal">/ 30 dní</span></div>
+                        
+                        <div class="border-t border-neutral-800 pt-2 space-y-1.5 text-[11px]">
+                            <p class="font-bold text-gray-400 uppercase text-[9px]">Čo obsahuje balík:</p>
+                            <p class="text-green-400"><i class="fa-solid fa-check mr-1.5"></i>Odomknutie všetkých filmov</p>
+                            <p class="text-gray-300"><i class="fa-solid fa-check mr-1.5 text-green-400"></i>Základný PRO Profil</p>
+                            <p class="text-gray-500 line-through"><i class="fa-solid fa-xmark mr-1.5 text-red-500"></i>Offline sťahovanie filmov</p>
+                            <p class="text-gray-500 line-through"><i class="fa-solid fa-xmark mr-1.5 text-red-500"></i>4K HDR a Herné filmy</p>
+                        </div>
                     </div>
-                    <button onclick="payPlan('Basic HD', 4.99, 30)" class="mt-4 bg-neutral-800 hover:bg-neutral-700 py-2 rounded-xl font-bold">Zvoliť Basic</button>
+                    <button onclick="openCheckout('Basic HD', getPlanPrice('basic'), 30)" class="mt-4 bg-neutral-800 hover:bg-neutral-700 py-2.5 rounded-xl font-bold transition">Zvoliť Basic</button>
                 </div>
+
+                <!-- STANDARD -->
                 <div class="border border-neutral-700 rounded-2xl p-4 bg-neutral-900 flex flex-col justify-between">
-                    <div class="space-y-2">
-                        <h4 class="font-bold text-gray-100">Standard FHD (1080p)</h4>
-                        <div class="text-2xl font-black">8.99 € <span class="text-[10px] text-gray-400 font-normal">/ 30 dní</span></div>
-                        <ul class="space-y-1.5 text-gray-300 pt-2"><li><i class="fa-solid fa-check text-green-500 mr-1.5"></i>1080p FHD + Offline režim</li></ul>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <h4 class="font-bold text-gray-100">Standard FHD</h4>
+                            <span class="text-[9px] bg-neutral-700 px-1.5 py-0.5 rounded text-gray-300">1080p Full HD</span>
+                        </div>
+                        <div class="text-2xl font-black text-white"><span id="priceStandard">8.99</span> € <span class="text-[10px] text-gray-400 font-normal">/ 30 dní</span></div>
+                        
+                        <div class="border-t border-neutral-800 pt-2 space-y-1.5 text-[11px]">
+                            <p class="font-bold text-gray-400 uppercase text-[9px]">Čo obsahuje balík:</p>
+                            <p class="text-green-400"><i class="fa-solid fa-check mr-1.5"></i>Všetky filmy a horory odomknuté</p>
+                            <p class="text-green-400"><i class="fa-solid fa-check mr-1.5"></i>PRO VIP Profil so strieborným odznakom</p>
+                            <p class="text-green-400"><i class="fa-solid fa-check mr-1.5"></i>Offline sťahovanie filmov (IndexedDB)</p>
+                            <p class="text-gray-500 line-through"><i class="fa-solid fa-xmark mr-1.5 text-red-500"></i>AI VIP Odporúčací algoritmus</p>
+                        </div>
                     </div>
-                    <button onclick="payPlan('Standard FHD', 8.99, 30)" class="mt-4 bg-neutral-700 hover:bg-neutral-600 py-2 rounded-xl font-bold">Zvoliť Standard</button>
+                    <button onclick="openCheckout('Standard FHD', getPlanPrice('standard'), 30)" class="mt-4 bg-neutral-700 hover:bg-neutral-600 py-2.5 rounded-xl font-bold transition">Zvoliť Standard</button>
                 </div>
-                <div class="border-2 border-red-600 rounded-2xl p-4 bg-gradient-to-b from-red-950/40 to-neutral-900 flex flex-col justify-between shadow-xl shadow-red-600/20">
-                    <div class="space-y-2">
-                        <h4 class="font-black text-red-500"><i class="fa-solid fa-crown mr-1"></i>PRO Ultra 4K</h4>
-                        <div class="text-2xl font-black">12.99 € <span class="text-[10px] text-gray-400 font-normal">/ 30 dní</span></div>
-                        <ul class="space-y-1.5 text-gray-300 pt-2"><li><i class="fa-solid fa-check text-red-500 mr-1.5"></i>4K 60FPS + AI Novinky</li></ul>
+
+                <!-- PRO ULTRA 4K -->
+                <div class="border-2 border-red-600 rounded-2xl p-4 bg-gradient-to-b from-red-950/40 via-neutral-900 to-neutral-900 flex flex-col justify-between shadow-xl shadow-red-600/20 relative">
+                    <div class="absolute -top-3 right-3 bg-red-600 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">NAJLEPŠIE</div>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <h4 class="font-black text-red-500 flex items-center gap-1"><i class="fa-solid fa-crown"></i> PRO Ultra 4K</h4>
+                            <span class="text-[9px] bg-red-600/30 text-red-400 px-1.5 py-0.5 rounded font-bold">4K 60FPS</span>
+                        </div>
+                        <div class="text-2xl font-black text-white"><span id="priceUltra">12.99</span> € <span class="text-[10px] text-gray-400 font-normal">/ 30 dní</span></div>
+                        
+                        <div class="border-t border-neutral-800 pt-2 space-y-1.5 text-[11px]">
+                            <p class="font-bold text-yellow-400 uppercase text-[9px]"><i class="fa-solid fa-star mr-1"></i>Všetko Platené v Balíku:</p>
+                            <p class="text-green-400 font-semibold"><i class="fa-solid fa-check text-red-500 mr-1.5"></i>Všetky filmy a čínske horory odomknuté</p>
+                            <p class="text-yellow-400 font-bold"><i class="fa-solid fa-check text-red-500 mr-1.5"></i>PRO VIP Profil so zlatou korunkou</p>
+                            <p class="text-green-400"><i class="fa-solid fa-check text-red-500 mr-1.5"></i>Neobmedzené 4K sťahovanie Offline</p>
+                            <p class="text-cyan-400 font-semibold"><i class="fa-solid fa-check text-red-500 mr-1.5"></i>AI YouTube Odporúčanie Horúcich Noviniek</p>
+                        </div>
                     </div>
-                    <button onclick="payPlan('PRO Ultra 4K', 12.99, 30)" class="mt-4 bg-red-600 hover:bg-red-700 text-white font-black py-2 rounded-xl shadow-lg">Aktivovať PRO 4K</button>
+                    <button onclick="openCheckout('PRO Ultra 4K', getPlanPrice('ultra'), 30)" class="mt-4 bg-red-600 hover:bg-red-700 text-white font-black py-2.5 rounded-xl shadow-lg transition">Aktivovať PRO 4K</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- MODAL: SECURE PAYMENT GATEWAY WITH 6-DIGIT VERIFICATION (2FA/PIN) -->
+    <div id="payM" class="fixed inset-0 z-50 bg-black/90 hidden flex items-center justify-center p-4 backdrop-blur-xl">
+        <div class="bg-neutral-950 border border-neutral-800 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl text-xs">
+            <div class="flex justify-between items-center border-b border-neutral-800 pb-2.5">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-2xl text-green-400"></i>
+                    <div>
+                        <h3 class="font-bold text-sm text-white">BannaPay 256-bit SSL</h3>
+                        <p class="text-[10px] text-gray-400">Bezpečná Platobná Brána</p>
+                    </div>
+                </div>
+                <button onclick="closeM('payM')" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-base"></i></button>
+            </div>
+
+            <div class="bg-neutral-900 p-3 rounded-xl border border-neutral-800 flex justify-between items-center">
+                <div>
+                    <p id="coTitle" class="font-bold text-white text-xs">PRO Ultra 4K</p>
+                    <p class="text-[10px] text-gray-400">Zahŕňa VIP Profil a odomknutie filmov</p>
+                </div>
+                <div id="coPrice" class="text-xl font-black text-green-400">12.99 €</div>
+            </div>
+
+            <form onsubmit="handlePaySubmit(event)" class="space-y-3">
+                <div>
+                    <label class="text-gray-300 block mb-1 font-medium">Meno a priezvisko</label>
+                    <input type="text" required placeholder="Ján Novák" class="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-2 text-white">
+                </div>
+                <div>
+                    <label class="text-gray-300 block mb-1 font-medium">Číslo platobnej karty</label>
+                    <input type="text" required maxlength="19" placeholder="4532 •••• •••• 8892" class="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-2 text-white font-mono">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-gray-300 block mb-1 font-medium">Platnosť (MM/RR)</label>
+                        <input type="text" required maxlength="5" placeholder="12/28" class="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-2 text-white text-center font-mono">
+                    </div>
+                    <div>
+                        <label class="text-gray-300 block mb-1 font-medium">CVC</label>
+                        <input type="password" required maxlength="3" placeholder="789" class="w-full bg-neutral-900 border border-neutral-700 rounded-lg p-2 text-white text-center font-mono">
+                    </div>
+                </div>
+
+                <!-- 6-DIGIT VERIFICATION CODE -->
+                <div class="bg-neutral-900/80 p-3 rounded-xl border border-neutral-800 space-y-1.5">
+                    <label class="text-yellow-400 block font-bold flex items-center justify-between">
+                        <span><i class="fa-solid fa-key mr-1"></i>6-Miestny Bezpečnostný Kód (2FA / PIN):</span>
+                        <span class="text-[9px] text-gray-400 font-normal">SMS / Kľúč</span>
+                    </label>
+                    <input id="payPin" type="text" required maxlength="6" pattern="[0-9]{6}" placeholder="123456" class="w-full bg-neutral-950 border border-amber-500/60 rounded-lg p-2 text-white text-center font-mono tracking-widest text-base font-bold focus:border-yellow-400">
+                    <p class="text-[10px] text-gray-500 text-center">Zadajte ľubovoľných 6 číslic pre potvrdenie bezpečnej transakcie.</p>
+                </div>
+
+                <button type="submit" id="payBtn" class="w-full mt-2 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 text-white font-black py-3 rounded-xl text-xs transition shadow-lg shadow-red-600/30 flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-lock"></i> Overiť 6-Miestny Kód a Zaplatiť
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- JS ENGINE -->
     <script>
-        const DB_NAME = 'BannaTubeDB_V4', DB_VER = 1;
+        const DB_NAME = 'BannaTubeDB_V5', DB_VER = 1;
         let db, appState = { apiKey: '', isPro: false, subscription: null, activeVideo: null, watchlist: [], likes: [], offline: [], freeMovieIds: [], userProfile: { name: 'Návštevník', avatar: 'https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png', customBanner: '' } };
 
         const CATALOG = {
@@ -430,6 +517,51 @@
                 { id: "Y5qa430mXyU", title: "God of War Ragnarok: Kompletný Film", desc: "Kratos a Atreus v boji o záchranu sveta v 4K 60fps.", thumb: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&q=80", match: 99, year: 2024 }
             ]
         };
+
+        /** DYNAMIC PRICING ENGINE: Zdražovanie každé 2 mesiace + Zľavy na Sviatky */
+        function calculateDynamicPrices() {
+            const now = new Date();
+            const month = now.getMonth(); // 0 = Január, 11 = December
+            const day = now.getDate();
+
+            // Kontrola sviatkov (Vianoce v decembri, Silvester, Veľká noc, atď.)
+            const isHoliday = (month === 11 && day >= 15) || (month === 0 && day <= 6); // Vianočné sviatky
+            
+            // Zdražovanie každé 2 mesiace (+1.50€ za každé 2 mesiace v roku)
+            const bimonthIndex = Math.floor(month / 2);
+            const inflationIncrement = bimonthIndex * 1.50;
+
+            let base = { basic: 4.99, standard: 8.99, ultra: 12.99 };
+            
+            let prices = {
+                basic: Number((base.basic + inflationIncrement).toFixed(2)),
+                standard: Number((base.standard + inflationIncrement).toFixed(2)),
+                ultra: Number((base.ultra + inflationIncrement).toFixed(2))
+            };
+
+            if (isHoliday) {
+                // Sviatočná zľava 50%
+                prices.basic = Number((prices.basic * 0.5).toFixed(2));
+                prices.standard = Number((prices.standard * 0.5).toFixed(2));
+                prices.ultra = Number((prices.ultra * 0.5).toFixed(2));
+
+                const hBadge = document.getElementById('holidayBadge');
+                if (hBadge) hBadge.classList.remove('hidden');
+                document.getElementById('planNoticeText').innerHTML = `<span class="text-green-400 font-bold">🎄 SVIATKY: Aktivovaná -50% sviatočná zľava na všetky balíky!</span>`;
+            }
+
+            // Aktualizácia UI cien v modali
+            document.getElementById('priceBasic').innerText = prices.basic.toFixed(2);
+            document.getElementById('priceStandard').innerText = prices.standard.toFixed(2);
+            document.getElementById('priceUltra').innerText = prices.ultra.toFixed(2);
+
+            return prices;
+        }
+
+        function getPlanPrice(planKey) {
+            const p = calculateDynamicPrices();
+            return p[planKey] || 12.99;
+        }
 
         async function initDB() {
             return new Promise((res, rej) => {
@@ -472,6 +604,7 @@
             setTimeout(() => { document.getElementById('intro').style.display = 'none'; }, 2200);
             await initDB();
             logC('SYS', 'IndexedDB pripravená.');
+            calculateDynamicPrices();
             await loadData();
             await syncRefresh();
             setupSearch();
@@ -492,7 +625,7 @@
         }
 
         async function syncRefresh() {
-            logC('REQ', 'Spúšťam automatickú synchronizáciu YouTube...');
+            logC('REQ', 'Spúšťam automatickú synchronizáciu YouTube noviniek...');
             setSyncB('load', 'SYNC...');
             appState.freeMovieIds = [];
 
@@ -556,7 +689,7 @@
                         ` : `
                             <div class="absolute inset-0 bg-black/70 flex flex-col items-center justify-center space-y-1">
                                 <div class="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center shadow-[0_0_12px_#e50914]"><i class="fa-solid fa-lock text-xs"></i></div>
-                                <span class="text-[8px] font-black text-yellow-400">ZAMKNUTÉ (VIP)</span>
+                                <span class="text-[8px] font-black text-yellow-400">ZAMKNUTÉ (PREMIUM)</span>
                             </div>
                         `}
                         <span class="absolute top-1.5 left-1.5 ${isFree?'bg-green-600 text-white':'bg-red-600 text-white'} text-[7px] font-black px-1.5 py-0.5 rounded shadow">${isFree?'FREE 🟢':'PRO VIP 🔒'}</span>
@@ -572,8 +705,8 @@
         }
 
         function lockAlert(m) {
-            showToast(`🔒 Film "${m.title.slice(0, 18)}..." je zamknutý! Vygenerujte si VIP účet.`, 'error');
-            openM('accM');
+            showToast(`🔒 Film "${m.title.slice(0, 18)}..." je v platenom balíčku!`, 'error');
+            openM('planM');
         }
 
         function openPlayer(m) {
@@ -636,6 +769,63 @@
             document.getElementById('pStat').className = "text-green-400 font-bold text-xs mt-0.5";
             document.getElementById('nUpTxt').innerText = "VIP AKTÍVNE";
             document.getElementById('fNotice').classList.add('hidden');
+        }
+
+        /** 6-DIGIT PAYMENT GATEWAY HANDLER */
+        let currCheckout = {};
+        function openCheckout(planName, price, days) {
+            currCheckout = { planName, price, days };
+            closeM('planM');
+            document.getElementById('coTitle').innerText = `${planName} (${days} Dní)`;
+            document.getElementById('coPrice').innerText = `${price.toFixed(2)} €`;
+            document.getElementById('payPin').value = '';
+            openM('payM');
+        }
+
+        async function handlePaySubmit(e) {
+            e.preventDefault();
+            const pin = document.getElementById('payPin').value.trim();
+            if(pin.length !== 6) {
+                showToast("Zadajte platný 6-miestny bezpečnostný kód!", "error");
+                return;
+            }
+
+            const btn = document.getElementById('payBtn');
+            btn.innerHTML = `<i class="fa-solid fa-circle-notch fa-spin"></i> Overujem 6-miestny kód...`;
+            btn.disabled = true;
+
+            setTimeout(async () => {
+                const sub = { id: 'active', planName: currCheckout.planName, exp: Date.now() + (currCheckout.days*24*60*60*1000) };
+                
+                // Automatický upgrade profilu v balíčku
+                const prof = {
+                    id: 'main',
+                    name: `PRO_${appState.userProfile.name.replace('PRO_', '')}`,
+                    avatar: appState.userProfile.avatar,
+                    customBanner: appState.userProfile.customBanner || ''
+                };
+
+                await idb.set('subscription', sub);
+                await idb.set('userProfile', prof);
+
+                appState.isPro = true;
+                appState.subscription = sub;
+                appState.userProfile = prof;
+
+                applyProf();
+                updateSubUI(sub);
+
+                btn.innerHTML = `<i class="fa-solid fa-check"></i> Platba Úspešná!`;
+                logC('OK', `Platba schválená s 6-PIN kódom: ${currCheckout.planName}`);
+
+                setTimeout(() => {
+                    closeM('payM');
+                    btn.innerHTML = `<i class="fa-solid fa-lock"></i> Overiť 6-Miestny Kód a Zaplatiť`;
+                    btn.disabled = false;
+                    showToast(`🎉 Balík ${currCheckout.planName} a PRO Profil úspešne aktivovaný!`, 'success');
+                    syncRefresh();
+                }, 1000);
+            }, 1500);
         }
 
         function setupSearch() {
@@ -714,7 +904,7 @@
         function setSpeed(s) {
             document.querySelectorAll('.sp-btn').forEach(b => b.className = "sp-btn bg-neutral-800 hover:bg-neutral-700 px-2 py-1 rounded");
             event.target.className = "sp-btn bg-red-600 text-white px-2 py-1 rounded font-bold";
-            showToast(`Rýchlosť nastavená na ${s}x`, 'info');
+            showToast(`Rýchlosť: ${s}x`, 'info');
         }
 
         function openM(id) { document.getElementById(id).classList.remove('hidden'); }
@@ -726,14 +916,6 @@
         async function saveApi() {
             const v = document.getElementById('apiInp').value.trim();
             if(v) { await idb.set('settings', { id: 'yt_key', val: v }); appState.apiKey = v; closeM('apiM'); showToast('API Kľúč uložený!', 'success'); syncRefresh(); }
-        }
-        function payPlan(name, price, days) {
-            closeM('planM');
-            const sub = { id: 'active', planName: name, exp: Date.now() + (days*24*60*60*1000) };
-            idb.set('subscription', sub).then(() => {
-                appState.isPro = true; appState.subscription = sub; updateSubUI(sub);
-                showToast(`🎉 Predplatné ${name} aktivované!`, 'success'); syncRefresh();
-            });
         }
         async function wipeDB() { if(confirm('Naozaj vymazať celú databázu?')) { indexedDB.deleteDatabase(DB_NAME); location.reload(); } }
         function showToast(msg, t = 'info') {
